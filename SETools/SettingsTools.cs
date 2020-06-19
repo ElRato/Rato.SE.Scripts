@@ -24,7 +24,7 @@ namespace IngameScript
             string ComposeString();
         }
 
-        public class SettingsHandler<T> where T : ISettings, new()
+        public class SettingsHandler
         {
             Program _program;
             public SettingsHandler(Program program)
@@ -32,26 +32,23 @@ namespace IngameScript
                 _program = program;
             }
 
-            public T GetSettings()
+            public T GetSettings<T>() where T : ISettings, new()
             {
                 string stringSettings = string.IsNullOrWhiteSpace(_program.Storage) 
                     ? _program.Me.CustomData
                     : _program.Storage;
                 
-                _program.Echo(stringSettings);
-
-                return ParseToObject(stringSettings);
+                var settings = new T();
+                return ParseToObject<T>(stringSettings, settings);
             }
-            public T ResetSettings()
+            public T ResetSettings<T>(T settings) where T : ISettings, new()
             {
                 string stringSettings = _program.Me.CustomData;
-                _program.Echo(stringSettings);
-                return ParseToObject(stringSettings);
+                return ParseToObject(stringSettings, settings);
             }
 
-            private static T ParseToObject(string stringSettings)
+            private static T ParseToObject<T>(string stringSettings, T settings) where T : ISettings, new()
             {
-                var settings = new T();
                 settings.ParseString(stringSettings);
                 return settings;
             }

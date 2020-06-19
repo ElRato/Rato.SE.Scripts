@@ -21,61 +21,51 @@ namespace IngameScript
 {
     partial class Program : MyGridProgram
     {
-        // This file contains your actual script.
-        //
-        // You can either keep all your code here, or you can create separate
-        // code files to make your program easier to navigate while coding.
-        //
-        // In order to add a new utility class, right-click on your project, 
-        // select 'New' then 'Add Item...'. Now find the 'Space Engineers'
-        // category under 'Visual C# Items' on the left hand side, and select
-        // 'Utility Class' in the main area. Name it in the box below, and
-        // press OK. This utility class will be merged in with your code when
-        // deploying your final script.
-        //
-        // You can also simply create a new utility class manually, you don't
-        // have to use the template if you don't want to. Just do so the first
-        // time to see what a utility class looks like.
-        // 
-        // Go to:
-        // https://github.com/malware-dev/MDK-SE/wiki/Quick-Introduction-to-Space-Engineers-Ingame-Scripts
-        //
-        // to learn more about ingame scripts.
-
-
         private HandSettings _handSettings;
-        private SettingsHandler<HandSettings> _settingsHandler;
+        private SettingsHandler _settingsHandler;
+        private DebuggerSettings _debuggerSettings;
+        private ILogger _logger;
+        
+        private List<IMyPistonBase> _handPistons;
 
         public Program()
         {
-            _settingsHandler = new SettingsHandler<HandSettings>(this);
-            _handSettings = _settingsHandler.GetSettings();
+            _settingsHandler = new SettingsHandler(this);
+            _handSettings = _settingsHandler.GetSettings<HandSettings>();
+            _debuggerSettings = _settingsHandler.GetSettings<DebuggerSettings>();
+            _logger = new EchoLogger(this);
+
+            _handPistons = new List<IMyPistonBase>();
 
             Runtime.UpdateFrequency = UpdateFrequency.Once;
         }
 
         public void Save()
         {
-            // Called when the program needs to save its state. Use
-            // this method to save your state to the Storage field
-            // or some other means. 
-            // 
-            // This method is optional and can be removed if not
-            // needed.
         }
 
         public void Main(string argument, UpdateType updateSource)
         {
-            Echo(argument);
-            if (argument == "Action.Reconfigure")
+            try
             {
-                Echo("Reconfigure");
-                _handSettings = _settingsHandler.ResetSettings();
-            }
+                if (argument == "Action.Reconfigure")
+                {
+                    _logger.LogInformation("Reset Setting");
+                    _handSettings = _settingsHandler.ResetSettings(_handSettings);
+                }
+                _logger.LogInformation($"Serach for {_handSettings.PistonSufix}");
+                GridTerminalSystem.GetBlocksOfType(_handPistons, p => p.CustomName.Contains(_handSettings.PistonSufix));
+                _logger.LogInformation(_handPistons.Count.ToString());
+                _logger.LogInformation(_handPistons[0].Status.ToString());
+                _handPistons.ForEach(p =>
+                {
+                    p.Velocity = (float)_handSettings.PistonMaxSpeed;
 
-            Echo(_handSettings.PistonSufix);
-            Echo(_handSettings.PistonMaxSpeed.ToString());
-            Echo(_handSettings.ComposeString());
+                });
+            }
+            catch (Exception e) {
+                _logger.LogInformation(e.Message);
+            }
         }
     }
 }
