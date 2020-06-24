@@ -24,6 +24,10 @@ namespace IngameScript
     {
         public interface ILogger {
             void LogInformation(String message);
+
+            void LogWarning(String message);
+
+            void LogError(String message);
         }
         public class EchoLogger : ILogger
         {
@@ -33,7 +37,44 @@ namespace IngameScript
             }
             public void LogInformation(string message)
             {
-                _program.Echo(message);
+                _program.Echo($"[INF]{message}");
+            }
+
+            public void LogWarning(string message)
+            {
+                _program.Echo($"[WRN]{message}");
+            }
+
+            public void LogError(string message)
+            {
+                _program.Echo($"[ERR]{message}");
+            }
+        }
+
+        public class LcdTextLogger : ILogger
+        {
+            private Program _program;
+            private IMyTextSurface _panel;
+            public LcdTextLogger(Program program, string header, IMyTextSurface panel)
+            {
+                _program = program;
+                _panel = panel;
+                _panel.WriteText($"{header}\n");
+                _panel.ContentType = ContentType.TEXT_AND_IMAGE;
+            }
+            public void LogInformation(string message)
+            {
+                _panel.WriteText($"{message}\n", true);
+            }
+
+            public void LogWarning(string message)
+            {
+                _panel.WriteText($"{message}\n", true);
+            }
+
+            public void LogError(string message)
+            {
+                _panel.WriteText($"{message}\n", true);
             }
         }
     }

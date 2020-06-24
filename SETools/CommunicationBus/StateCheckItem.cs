@@ -21,18 +21,21 @@ namespace IngameScript
 {
     partial class Program
     {
-        public abstract class BaseSettings : ISettings
+        public enum ModuleState{ 
+            Ok,
+            Warning,
+            Error
+        }
+        public struct StateCheckItem
         {
-            protected MyIni _ini = new MyIni();
-
-            public abstract string ComposeString();
-
-            public virtual void ParseString(string store)
-            {
-                MyIniParseResult result;
-                if (!_ini.TryParse(store, out result))
-                    throw new Exception(result.ToString());
+            public StateCheckItem(string name) {
+                Name = name;
+                Level = ModuleState.Error;
             }
+            
+            public string Name;
+
+            public ModuleState Level;
         }
     }
 }

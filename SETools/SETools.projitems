@@ -9,7 +9,8 @@
     <Import_RootNamespace>IngameScript</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)BaseSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\CommunicationBus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\StateCheckItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DebuggerSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loggers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsTools.cs" />

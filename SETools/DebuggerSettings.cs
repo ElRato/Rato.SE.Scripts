@@ -22,20 +22,18 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class DebuggerSettings : BaseSettings
+        public class DebuggerSettings : ISettings
         {
             bool SilentlyCatch;
 
-            public override string ComposeString()
+            public void LoadValues(MyIni config)
             {
-                _ini.Set(nameof(HandSettings), nameof(SilentlyCatch), SilentlyCatch);
-                return _ini.ToString();
+                SilentlyCatch = config.Get(nameof(DebuggerSettings), nameof(SilentlyCatch)).ToBoolean();
             }
 
-            public override void ParseString(string store)
+            public void WriteValues(MyIni config)
             {
-                base.ParseString(store);
-                SilentlyCatch = _ini.Get(nameof(DebuggerSettings), nameof(SilentlyCatch)).ToBoolean();
+                config.Set(nameof(HandSettings), nameof(SilentlyCatch), SilentlyCatch);
             }
         }
     }

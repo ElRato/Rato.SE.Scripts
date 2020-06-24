@@ -21,28 +21,31 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class HandSettings : BaseSettings
+        public class HandSettings : ISettings
         {
             public string PistonSufix;
+            public string RotorSufix;
             public double PistonMaxSpeed;
-/*
-[HandSettings]
-PistonSufix=hnd
-PistonMaxSpeed=0.5
-*/
-            public override void ParseString(string store)
+            
+
+            /*
+            [HandSettings]
+            PistonSufix=hnd
+            PistonMaxSpeed=0.5
+            RotorSufix=hnd
+            */
+            public void LoadValues(MyIni config)
             {
-                base.ParseString(store);
-                PistonSufix = _ini.Get(nameof(HandSettings), nameof(PistonSufix)).ToString();
-                PistonMaxSpeed = _ini.Get(nameof(HandSettings), nameof(PistonMaxSpeed)).ToDouble();
+                PistonSufix = config.Get(nameof(HandSettings), nameof(PistonSufix)).ToString();
+                PistonMaxSpeed = config.Get(nameof(HandSettings), nameof(PistonMaxSpeed)).ToDouble();
+                RotorSufix = config.Get(nameof(HandSettings), nameof(RotorSufix)).ToString();
             }
 
-            public override string ComposeString()
+            public void WriteValues(MyIni config)
             {
-                _ini.Clear();
-                _ini.Set(nameof(HandSettings), nameof(PistonSufix), PistonSufix);
-                _ini.Set(nameof(HandSettings), nameof(PistonMaxSpeed), PistonMaxSpeed);
-                return _ini.ToString();
+                config.Set(nameof(HandSettings), nameof(PistonSufix), PistonSufix);
+                config.Set(nameof(HandSettings), nameof(PistonMaxSpeed), PistonMaxSpeed);
+                config.Set(nameof(HandSettings), nameof(RotorSufix), RotorSufix);
             }
         }
     }

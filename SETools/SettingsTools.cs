@@ -20,37 +20,42 @@ namespace IngameScript
     partial class Program
     {
         public interface ISettings{
-            void ParseString(string store);
-            string ComposeString();
+            void LoadValues(MyIni config);
+            void WriteValues(MyIni config);
         }
 
         public class SettingsHandler
         {
+            private MyIni _ini = new MyIni();
+
+            
             Program _program;
             public SettingsHandler(Program program)
             {
                 _program = program;
-            }
-
-            public T GetSettings<T>() where T : ISettings, new()
-            {
-                string stringSettings = string.IsNullOrWhiteSpace(_program.Storage) 
+                
+                string stringSettings = string.IsNullOrWhiteSpace(_program.Storage)
                     ? _program.Me.CustomData
                     : _program.Storage;
-                
-                var settings = new T();
-                return ParseToObject<T>(stringSettings, settings);
-            }
-            public T ResetSettings<T>(T settings) where T : ISettings, new()
-            {
-                string stringSettings = _program.Me.CustomData;
-                return ParseToObject(stringSettings, settings);
+                ResetStore(stringSettings);
             }
 
-            private static T ParseToObject<T>(string stringSettings, T settings) where T : ISettings, new()
+            public T ReadSettings<T>(T settings) where T : ISettings, new()
             {
-                settings.ParseString(stringSettings);
+                if(settings == null)
+                    settings = new T();
+                settings.LoadValues(_ini);
                 return settings;
+            }
+
+            public void ResetToManual() {
+                ResetStore(_program.Me.CustomData);
+            }
+
+            private void ResetStore(string store) {
+                MyIniParseResult result;
+                if (!_ini.TryParse(store, out result))
+                    throw new Exception(result.ToString());
             }
         }
     }

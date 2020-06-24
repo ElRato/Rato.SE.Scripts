@@ -16,27 +16,39 @@ using VRage.Game.ObjectBuilders.Definitions;
 using VRage.Game;
 using VRage;
 using VRageMath;
+using Sandbox.ModAPI;
 
 namespace IngameScript
 {
     partial class Program : MyGridProgram
     {
+        private ILogger _logger;
+        private ILogger _stateLcd;
+
         private HandSettings _handSettings;
         private SettingsHandler _settingsHandler;
         private DebuggerSettings _debuggerSettings;
-        private ILogger _logger;
         
-        private List<IMyPistonBase> _handPistons;
+        private CommunicationBus _communicationBus;
+        private HandModule _handController;
+        
+
 
         public Program()
         {
-            _settingsHandler = new SettingsHandler(this);
-            _handSettings = _settingsHandler.GetSettings<HandSettings>();
-            _debuggerSettings = _settingsHandler.GetSettings<DebuggerSettings>();
             _logger = new EchoLogger(this);
+            var lcd = Me.GetSurface(0);
+            _stateLcd = new LcdTextLogger(this, "System", lcd);
 
-            _handPistons = new List<IMyPistonBase>();
+            _settingsHandler = new SettingsHandler(this);
+            _handSettings = _settingsHandler.ReadSettings<HandSettings>(_handSettings);
+            _debuggerSettings = _settingsHandler.ReadSettings<DebuggerSettings>(_debuggerSettings);
 
+            _communicationBus = new CommunicationBus(_debuggerSettings, _logger);
+            _handController = new HandModule(_handSettings, this, _logger);
+
+            _communicationBus.AddModule("MainHand", _handController);
+            _communicationBus.Initialize(_stateLcd);
             Runtime.UpdateFrequency = UpdateFrequency.Once;
         }
 
@@ -51,17 +63,12 @@ namespace IngameScript
                 if (argument == "Action.Reconfigure")
                 {
                     _logger.LogInformation("Reset Setting");
-                    _handSettings = _settingsHandler.ResetSettings(_handSettings);
+                    _settingsHandler.ResetToManual();
+                    _handSettings = _settingsHandler.ReadSettings(_handSettings);
+                    _debuggerSettings = _settingsHandler.ReadSettings(_debuggerSettings);
+                    _stateLcd.LogInformation("Reconfiguration");
+                    _communicationBus.Initialize(_stateLcd);
                 }
-                _logger.LogInformation($"Serach for {_handSettings.PistonSufix}");
-                GridTerminalSystem.GetBlocksOfType(_handPistons, p => p.CustomName.Contains(_handSettings.PistonSufix));
-                _logger.LogInformation(_handPistons.Count.ToString());
-                _logger.LogInformation(_handPistons[0].Status.ToString());
-                _handPistons.ForEach(p =>
-                {
-                    p.Velocity = (float)_handSettings.PistonMaxSpeed;
-
-                });
             }
             catch (Exception e) {
                 _logger.LogInformation(e.Message);
