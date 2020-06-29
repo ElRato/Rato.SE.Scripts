@@ -42,6 +42,13 @@ namespace IngameScript
                 State = SequenceExecutorState.NoOperation;
                 _timer = new TickTimer(_logger);
             }
+
+            public UpdateFrequency StopExecution() {
+                _logger.LogInformation("Stop Executon");
+                State = SequenceExecutorState.NoOperation;
+                return UpdateFrequency.None;
+            }
+
             public UpdateFrequency StartSequence(IEnumerator<int> sequence)
             {
                 _logger.LogInformation("Started Sequence");
@@ -78,15 +85,13 @@ namespace IngameScript
                 _logger.LogInformation("ProcessStep");
                 if (_currentSequence.MoveNext())
                 {
-                    _logger.LogInformation("Has next Step");
+                    _logger.LogInformation("Continue execution");
                     State = SequenceExecutorState.InProgress;
                     return _timer.StartTimer(_currentSequence.Current);
                 }
                 else
                 {
-                    _logger.LogInformation("Stop Executon");
-                    State = SequenceExecutorState.NoOperation;
-                    return UpdateFrequency.None;
+                    return StopExecution();
                 }
             }
         }

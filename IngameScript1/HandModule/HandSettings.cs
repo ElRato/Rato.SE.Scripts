@@ -35,6 +35,8 @@ namespace IngameScript
 
             public double MaxAngle;
             public double MinAngle;
+            public int RotateDirection;
+            public double TargetElevation;
 
             public void LoadValues(MyIni config)
             {
@@ -43,6 +45,8 @@ namespace IngameScript
                 RotorSufix = config.Get(nameof(HandSettings), nameof(RotorSufix)).ToString("hnd");
                 MaxAngle = config.Get(nameof(HandSettings), nameof(MaxAngle)).ToDouble(0);
                 MinAngle = config.Get(nameof(HandSettings), nameof(MinAngle)).ToDouble(0);
+                RotateDirection = config.Get(nameof(HandSettings), nameof(RotateDirection)).ToInt32(1);
+                TargetElevation = config.Get(nameof(HandSettings), nameof(TargetElevation)).ToDouble(0);
             }
 
             public void WriteValues(MyIni config)
@@ -52,6 +56,8 @@ namespace IngameScript
                 config.Set(nameof(HandSettings), nameof(RotorSufix), RotorSufix);
                 config.Set(nameof(HandSettings), nameof(MinAngle), MinAngle);
                 config.Set(nameof(HandSettings), nameof(MinAngle), MinAngle);
+                config.Set(nameof(HandSettings), nameof(RotateDirection), RotateDirection);
+                config.Set(nameof(HandSettings), nameof(TargetElevation), TargetElevation);
             }
         }
     }

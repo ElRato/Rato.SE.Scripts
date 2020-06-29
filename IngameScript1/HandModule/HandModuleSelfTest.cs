@@ -32,34 +32,45 @@ namespace IngameScript
             {
                 State = ModuleState.SelfTest;
                 var testVelocity = (float)_settings.PistonMaxSpeed / 2;
-                var rotorAngle = _handMainRotor.Angle;
+                var previousAngle = _handMainRotor.Angle;
 
                 SetPistonsVelocity(testVelocity);
 
                 yield return 100;
 
-                while (Math.Abs(rotorAngle - _handMainRotor.Angle) > 0.0001)
+                while (Math.Abs(previousAngle - _handMainRotor.Angle) > 0.0001)
                 {
-                    rotorAngle = _handMainRotor.Angle;
-                    yield return 10;
+                    previousAngle = _handMainRotor.Angle;
+                    _logger.LogInformation($"current angle {previousAngle}");
+                    yield return 1;
                 }
 
-                _settings.MaxAngle = Math.Round(_handMainRotor.Angle * 180 / Math.PI);
+                _settings.MaxAngle = MathHelper.WrapAngle(_handMainRotor.Angle);
 
                 SetPistonsVelocity(-testVelocity);
                 
                 yield return 100;
 
-                while (Math.Abs(rotorAngle - _handMainRotor.Angle) > 0.0001)
+                while (Math.Abs(previousAngle - _handMainRotor.Angle) > 0.0001)
                 {
-                    rotorAngle = _handMainRotor.Angle;
-                    yield return 10;
+                    previousAngle = _handMainRotor.Angle;
+                    _logger.LogInformation($"current angle {previousAngle}");
+                    yield return 1;
                 }
 
-                _settings.MinAngle = Math.Round(_handMainRotor.Angle * 180 / Math.PI);
+                _settings.MinAngle = MathHelper.WrapAngle(_handMainRotor.Angle);
+                if (_settings.MinAngle > _settings.MaxAngle) {
+                    /*
+                    var t = _settings.MinAngle;
+                    _settings.MinAngle = _settings.MaxAngle;
+                    _settings.MaxAngle = t;
+                    */
+                    _settings.RotateDirection = -1;
+                }
 
                 _logger.LogInformation($"Max rotor angle = {_settings.MaxAngle}");
                 _logger.LogInformation($"Min rotor angle = {_settings.MinAngle}");
+                _logger.LogInformation($"Rotate Direction = {_settings.RotateDirection}");
 
                 SetPistonsVelocity(0);
 
@@ -68,7 +79,6 @@ namespace IngameScript
                     Name = "Self test",
                     Level = ActionStatus.Ok
                 });
-
 
                 State = ModuleState.Active;
             }

@@ -70,11 +70,25 @@ namespace IngameScript
 
             public UpdateFrequency Update(UpdateType currentHit)
             {
+                var updateHit = currentHit | (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100);
+
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
                     if(module.State.IncludeToUpdateSequence)
-                        updateFrequency |= module.ContinueSquence(currentHit);
+                        updateFrequency |= module.ContinueSquence(updateHit);
+                }
+                return updateFrequency;
+            }
+
+            public UpdateFrequency TerminalAction(UpdateType currentHit, string argument) {
+                var updateHit = currentHit | UpdateType.Terminal | UpdateType.Trigger;
+
+                var updateFrequency = UpdateFrequency.None;
+                foreach (var module in _modules.Values)
+                {
+                    if (module.State.FullyOperatable)
+                        updateFrequency |= module.TerminalAction(updateHit, argument);
                 }
                 return updateFrequency;
             }

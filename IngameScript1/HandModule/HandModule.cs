@@ -21,7 +21,7 @@ namespace IngameScript
 {
     partial class Program
     {
-        public partial class HandModule: IControllModule
+        public partial class HandModule : IControllModule
         {
             private HandSettings _settings;
             private MyGridProgram _program;
@@ -33,11 +33,12 @@ namespace IngameScript
 
             public SequenceExecutor _handPositionController;
 
-            public List<ModuleStateDetail> StateDetails { get; private set;}
+            public List<ModuleStateDetail> StateDetails { get; private set; }
 
             public ModuleState State { get; set; }
 
-            public HandModule(HandSettings settings, MyGridProgram program, ILogger logger) {
+            public HandModule(HandSettings settings, MyGridProgram program, ILogger logger)
+            {
                 _settings = settings;
                 _program = program;
                 _logger = logger;
@@ -56,11 +57,42 @@ namespace IngameScript
                 return _handPositionController.ContinueSequence(updateSource);
             }
 
-            private void SetPistonsVelocity(float velocity) {
+            private void SetPistonsVelocity(float velocity)
+            {
                 foreach (var piston in _handPistons)
                 {
                     piston.Velocity = velocity;
                 }
+            }
+            public UpdateFrequency TerminalAction(UpdateType updateSource, string Argument)
+            {
+                var updateFrequency = UpdateFrequency.None;
+                if (Argument.StartsWith("Hand") && (updateSource | UpdateType.Terminal | UpdateType.Trigger) > 0)
+                {
+                    //[TODO] Add Planetary elevation controll
+                    //[TODO] Add Go to top
+                    //[TODO] Add Go to horizontaldig - can be configured only manually
+                    
+                    if (_handPositionController.State == SequenceExecutorState.NoOperation)
+                    {
+                        updateFrequency = HoldElevation();
+                    }
+                    if (Argument == "Hand.Elevation.Inc")
+                    {
+                        _settings.TargetElevation = MathHelper.WrapAngle(_handMainRotor.Angle) + MathHelper.ToRadians(5) * _settings.RotateDirection;
+                        //[TODO] add max range controll
+                    }
+                    if (Argument == "Hand.Elevation.Dec")
+                    {
+                        _settings.TargetElevation = MathHelper.WrapAngle(_handMainRotor.Angle) - MathHelper.ToRadians(5) * _settings.RotateDirection;
+                    }
+                    if (Argument == "Hand.Stop")
+                    {
+                        updateFrequency = _handPositionController.StopExecution();
+                    }
+                }
+
+                return updateFrequency;
             }
         }
     }

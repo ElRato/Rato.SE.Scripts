@@ -29,6 +29,7 @@ namespace IngameScript
 
             UpdateFrequency StartTestSquence();
             UpdateFrequency ContinueSquence(UpdateType updateSource);
+            UpdateFrequency TerminalAction(UpdateType updateSource, string Argument);
         }
 
         public abstract class ModuleState

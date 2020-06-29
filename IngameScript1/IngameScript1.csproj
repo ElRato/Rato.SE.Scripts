@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="HandModule\HandModule.cs" />
     <Compile Include="HandModule\HandModuleInitialize.cs" />
+    <Compile Include="HandModule\HandModuleHoldElevation.cs" />
     <Compile Include="HandModule\HandModuleSelfTest.cs" />
     <Compile Include="HandModule\HandSettings.cs" />
     <Compile Include="MDK\Bootstrapper.cs" />

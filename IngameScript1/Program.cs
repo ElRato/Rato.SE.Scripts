@@ -70,7 +70,12 @@ namespace IngameScript
                     throw new Exception("CatchMe");
                 }
 
-                Runtime.UpdateFrequency = _communicationBus.Update(updateSource);
+                //[TODO] Make communication between modules.
+                //[TODO] Make Controller for automatic drilling - possiblyh it should be external?
+                Runtime.UpdateFrequency = _communicationBus.TerminalAction(updateSource, argument);
+                Runtime.UpdateFrequency |= _communicationBus.Update(updateSource);
+
+                //[TODO] Include cleanup into logger function
                 Me.GetSurface(0).WriteText($"", false);
                 _communicationBus.LogModuleState(_stateLcd);
             }
