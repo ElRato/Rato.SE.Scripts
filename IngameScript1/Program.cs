@@ -46,10 +46,8 @@ namespace IngameScript
             _handModule = new HandModule(_handSettings, this, _logger);
 
             _communicationBus.AddModule("MainHand", _handModule);
-            _communicationBus.Initialize(_stateLcd);
-
-            Runtime.UpdateFrequency = UpdateFrequency.Once;
-            Runtime.UpdateFrequency |= _handModule.StartTestSquence();
+            _communicationBus.Initialize();
+            Runtime.UpdateFrequency = _communicationBus.StartSelfTest();
         }
 
         public void Save()
@@ -67,13 +65,14 @@ namespace IngameScript
                     _handSettings = _settingsHandler.ReadSettings(_handSettings);
                     _debuggerSettings = _settingsHandler.ReadSettings(_debuggerSettings);
                     _stateLcd.LogInformation("Reconfiguration");
-                    _communicationBus.Initialize(_stateLcd);
-                    Runtime.UpdateFrequency |= _handModule.StartTestSquence();
+                    _communicationBus.Initialize();
+                    Runtime.UpdateFrequency = _communicationBus.StartSelfTest();
                     throw new Exception("CatchMe");
                 }
 
-                //move under communication bus
-                Runtime.UpdateFrequency |= _handModule._handPositionController.ContinueSequence(updateSource);
+                Runtime.UpdateFrequency = _communicationBus.Update(updateSource);
+                Me.GetSurface(0).WriteText($"", false);
+                _communicationBus.LogModuleState(_stateLcd);
             }
             catch (Exception e) {
                 _logger.LogInformation(e.Message);

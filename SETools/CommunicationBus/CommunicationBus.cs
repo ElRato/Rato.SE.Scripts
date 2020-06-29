@@ -25,15 +25,14 @@ namespace IngameScript
         {
             private DebuggerSettings _dbgSettings;
             private ILogger _logger;
-            private List<StateCheckItem> _stateCheckList;
 
             private Dictionary<string, IControllModule> _modules;
 
-            public CommunicationBus(DebuggerSettings dbgSettings, ILogger logger) {
+            public CommunicationBus(DebuggerSettings dbgSettings, ILogger logger)
+            {
                 _dbgSettings = dbgSettings;
                 _logger = logger;
                 _modules = new Dictionary<string, IControllModule>();
-                _stateCheckList = new List<StateCheckItem>();
             }
 
             public void AddModule(string key, IControllModule module)
@@ -49,13 +48,42 @@ namespace IngameScript
                 }
             }
 
-            public void Initialize(ILogger stateLogger)
+            public void Initialize()
             {
+                foreach (var module in _modules.Values)
+                {
+                    module.Initialize();
+                }
+            }
+
+            public UpdateFrequency StartSelfTest()
+            {
+                var updateFrequency = UpdateFrequency.None;
+                foreach (var module in _modules.Values)
+                {
+                    if (module.State.IncludeToUpdateSequence)
+                        updateFrequency |= module.StartTestSquence();
+                }
+
+                return updateFrequency;
+            }
+
+            public UpdateFrequency Update(UpdateType currentHit)
+            {
+                var updateFrequency = UpdateFrequency.None;
+                foreach (var module in _modules.Values)
+                {
+                    if(module.State.IncludeToUpdateSequence)
+                        updateFrequency |= module.ContinueSquence(currentHit);
+                }
+                return updateFrequency;
+            }
+
+            public void LogModuleState(ILogger stateLogger) {
                 foreach (var module in _modules)
                 {
-                    _stateCheckList.Clear();
-                    module.Value.Initialize(_stateCheckList);
-                    foreach (var checkItem in _stateCheckList)
+                    stateLogger.LogInformation($"{module.Key}: {module.Value.State.Name}");
+                    foreach (var checkItem in module.Value.StateDetails)
                     {
                         switch (checkItem.Level)
                         {
@@ -69,7 +97,6 @@ namespace IngameScript
                     }
                 }
             }
-
         }
     }
 }

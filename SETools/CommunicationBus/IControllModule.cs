@@ -23,24 +23,25 @@ namespace IngameScript
     {
         public interface IControllModule
         {
-            void Initialize(List<StateCheckItem> checkList);
+            void Initialize();
             ModuleState State { get; set; }
-            List<StateCheckItem> StateDetails { get; set; }
+            List<ModuleStateDetail> StateDetails { get; }
 
             UpdateFrequency StartTestSquence();
-
+            UpdateFrequency ContinueSquence(UpdateType updateSource);
         }
 
         public abstract class ModuleState
         {
             public string Name { get; private set; }
-            public bool ReadyToWork { get; private set; }
+            public bool FullyOperatable { get; private set; }
+            public bool IncludeToUpdateSequence { get; private set; }
 
             public static readonly ModuleState JustCreated = new JustCreatedState();
             public static readonly ModuleState Initialized = new InitializedState();
-            public static readonly ModuleState SelfTest = new NonFunctionalState();
+            public static readonly ModuleState SelfTest = new SelfTestState();
             public static readonly ModuleState Active = new ActiveState();
-            public static readonly ModuleState NonFunctional = new SelfTestState();
+            public static readonly ModuleState NonFunctional = new NonFunctionalState();
 
             public override bool Equals(object obj)
             {
@@ -62,7 +63,8 @@ namespace IngameScript
                 public ActiveState()
                 {
                     Name = nameof(ActiveState);
-                    ReadyToWork = true;
+                    FullyOperatable = true;
+                    IncludeToUpdateSequence = true;
                 }
             }
 
@@ -71,7 +73,8 @@ namespace IngameScript
                 public JustCreatedState()
                 {
                     Name = nameof(JustCreatedState);
-                    ReadyToWork = false;
+                    FullyOperatable = false;
+                    IncludeToUpdateSequence = false;
                 }
             }
 
@@ -80,7 +83,8 @@ namespace IngameScript
                 public InitializedState()
                 {
                     Name = nameof(InitializedState);
-                    ReadyToWork = false;
+                    FullyOperatable = false;
+                    IncludeToUpdateSequence = true;
                 }
             }
 
@@ -89,7 +93,8 @@ namespace IngameScript
                 public NonFunctionalState()
                 {
                     Name = nameof(NonFunctionalState);
-                    ReadyToWork = false;
+                    FullyOperatable = false;
+                    IncludeToUpdateSequence = false;
                 }
             }
 
@@ -98,14 +103,11 @@ namespace IngameScript
                 public SelfTestState()
                 {
                     Name = nameof(SelfTestState);
-                    ReadyToWork = false;
+                    FullyOperatable = false;
+                    IncludeToUpdateSequence = true;
                 }
             }
 
         }
-
-        
-
-
     }
 }

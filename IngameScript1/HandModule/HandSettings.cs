@@ -33,11 +33,16 @@ namespace IngameScript
             public string RotorSufix;
             public double PistonMaxSpeed;
 
+            public double MaxAngle;
+            public double MinAngle;
+
             public void LoadValues(MyIni config)
             {
-                PistonSufix = config.Get(nameof(HandSettings), nameof(PistonSufix)).ToString();
-                PistonMaxSpeed = config.Get(nameof(HandSettings), nameof(PistonMaxSpeed)).ToDouble();
-                RotorSufix = config.Get(nameof(HandSettings), nameof(RotorSufix)).ToString();
+                PistonSufix = config.Get(nameof(HandSettings), nameof(PistonSufix)).ToString("hnd");
+                PistonMaxSpeed = config.Get(nameof(HandSettings), nameof(PistonMaxSpeed)).ToDouble(0.5);
+                RotorSufix = config.Get(nameof(HandSettings), nameof(RotorSufix)).ToString("hnd");
+                MaxAngle = config.Get(nameof(HandSettings), nameof(MaxAngle)).ToDouble(0);
+                MinAngle = config.Get(nameof(HandSettings), nameof(MinAngle)).ToDouble(0);
             }
 
             public void WriteValues(MyIni config)
@@ -45,6 +50,8 @@ namespace IngameScript
                 config.Set(nameof(HandSettings), nameof(PistonSufix), PistonSufix);
                 config.Set(nameof(HandSettings), nameof(PistonMaxSpeed), PistonMaxSpeed);
                 config.Set(nameof(HandSettings), nameof(RotorSufix), RotorSufix);
+                config.Set(nameof(HandSettings), nameof(MinAngle), MinAngle);
+                config.Set(nameof(HandSettings), nameof(MinAngle), MinAngle);
             }
         }
     }

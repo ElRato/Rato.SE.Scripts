@@ -33,6 +33,10 @@ namespace IngameScript
 
             public SequenceExecutor _handPositionController;
 
+            public List<ModuleStateDetail> StateDetails { get; private set;}
+
+            public ModuleState State { get; set; }
+
             public HandModule(HandSettings settings, MyGridProgram program, ILogger logger) {
                 _settings = settings;
                 _program = program;
@@ -42,40 +46,21 @@ namespace IngameScript
 
                 _handPistons = new List<IMyPistonBase>();
                 _handMainRotors = new List<IMyMotorStator>();
+
+                StateDetails = new List<ModuleStateDetail>();
                 State = ModuleState.JustCreated;
             }
 
-            public ModuleState State { get; set; }
-
-            public List<StateCheckItem> Initialize(List<StateCheckItem> checkList)
+            public UpdateFrequency ContinueSquence(UpdateType updateSource)
             {
-                _program.GridTerminalSystem.GetBlocksOfType(_handPistons, p => p.CustomName.Contains(_settings.PistonSufix));
-                var pistonCount = new StateCheckItem("Hand Piston");
-                if (_handPistons.Count == 0)
-                {
-                    _logger.LogError($"Wrong rotor count with sufix {_settings.PistonSufix} found {_handPistons.Count } expected 1 and more");
-                }
-                if (_handPistons.Count > 0)
-                {
-                    pistonCount.Level = ActionStatus.Ok;
-                    _logger.LogInformation($"Found {_handPistons.Count} pistons with sufix {_settings.PistonSufix}");
-                }
-                checkList.Add(pistonCount);
+                return _handPositionController.ContinueSequence(updateSource);
+            }
 
-                var rotorCount = new StateCheckItem("Hand Rotor");
-                _program.GridTerminalSystem.GetBlocksOfType(_handMainRotors, p => p.CustomName.Contains(_settings.RotorSufix));
-                if (_handMainRotors.Count != 1)
+            private void SetPistonsVelocity(float velocity) {
+                foreach (var piston in _handPistons)
                 {
-                    _logger.LogError($"Wrong rotor count with sufix {_settings.RotorSufix} found {_handMainRotors.Count } expected 1");
-                } else {
-                    rotorCount.Level = ActionStatus.Ok;
-                    _handMainRotor = _handMainRotors[0];
+                    piston.Velocity = velocity;
                 }
-                checkList.Add(rotorCount);
-
-                State = checkList.Any(c => c.Level == ActionStatus.Error) ? ModuleState.NonFunctional : ModuleState.Initialized;
-
-                return checkList;
             }
         }
     }

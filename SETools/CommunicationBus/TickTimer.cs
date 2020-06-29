@@ -48,8 +48,8 @@ namespace IngameScript
                 TargetTics = ticksCnt;
                 ticksCnt = ticksCnt == 0 ? 1 : ticksCnt;
                 _waitFor100 = ticksCnt / 100;
-                _waitFor10 = (ticksCnt - _waitFor100) / 10;
-                _waitFor1 = (ticksCnt - _waitFor100 - _waitFor10);
+                _waitFor10 = (ticksCnt - _waitFor100 * 100) / 10;
+                _waitFor1 = (ticksCnt - _waitFor100 * 100 - _waitFor10 * 10);
 
                 CalculateNextDelay();
 
