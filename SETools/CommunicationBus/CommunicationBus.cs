@@ -21,10 +21,6 @@ namespace IngameScript
 {
     partial class Program
     {
-        public interface IControllModule {
-            List<StateCheckItem> Initialize(List<StateCheckItem> checkList);
-        }
-
         public class CommunicationBus
         {
             private DebuggerSettings _dbgSettings;
@@ -63,11 +59,11 @@ namespace IngameScript
                     {
                         switch (checkItem.Level)
                         {
-                            case ModuleState.Ok:
+                            case ActionStatus.Ok:
                                 stateLogger.LogInformation($"{checkItem.Name}: OK"); break;
-                            case ModuleState.Warning:
+                            case ActionStatus.Warning:
                                 stateLogger.LogWarning($"{checkItem.Name}: Warning"); break;
-                            case ModuleState.Error:
+                            case ActionStatus.Error:
                                 stateLogger.LogError($"{checkItem.Name}: Failed"); break;
                         }
                     }

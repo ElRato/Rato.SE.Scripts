@@ -30,9 +30,7 @@ namespace IngameScript
         private DebuggerSettings _debuggerSettings;
         
         private CommunicationBus _communicationBus;
-        private HandModule _handController;
-        
-
+        private HandModule _handModule;
 
         public Program()
         {
@@ -45,11 +43,13 @@ namespace IngameScript
             _debuggerSettings = _settingsHandler.ReadSettings<DebuggerSettings>(_debuggerSettings);
 
             _communicationBus = new CommunicationBus(_debuggerSettings, _logger);
-            _handController = new HandModule(_handSettings, this, _logger);
+            _handModule = new HandModule(_handSettings, this, _logger);
 
-            _communicationBus.AddModule("MainHand", _handController);
+            _communicationBus.AddModule("MainHand", _handModule);
             _communicationBus.Initialize(_stateLcd);
+
             Runtime.UpdateFrequency = UpdateFrequency.Once;
+            Runtime.UpdateFrequency |= _handModule.StartTestSquence();
         }
 
         public void Save()
@@ -68,7 +68,12 @@ namespace IngameScript
                     _debuggerSettings = _settingsHandler.ReadSettings(_debuggerSettings);
                     _stateLcd.LogInformation("Reconfiguration");
                     _communicationBus.Initialize(_stateLcd);
+                    Runtime.UpdateFrequency |= _handModule.StartTestSquence();
+                    throw new Exception("CatchMe");
                 }
+
+                //move under communication bus
+                Runtime.UpdateFrequency |= _handModule._handPositionController.ContinueSequence(UpdateFrequency.Update1);
             }
             catch (Exception e) {
                 _logger.LogInformation(e.Message);

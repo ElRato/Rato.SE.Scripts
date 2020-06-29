@@ -38,8 +38,9 @@
   <Import Project="MDK/MDK.options.props" />
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
-    <Compile Include="HandModule.cs" />
-    <Compile Include="HandSettings.cs" />
+    <Compile Include="HandModule\HandModule.cs" />
+    <Compile Include="HandModule\HandModuleSelfTestProcess.cs" />
+    <Compile Include="HandModule\HandSettings.cs" />
     <Compile Include="MDK\Bootstrapper.cs" />
     <AdditionalFiles Include="MDK\MDK.options.props">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

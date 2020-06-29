@@ -21,21 +21,14 @@ namespace IngameScript
 {
     partial class Program
     {
-        public enum ActionStatus{ 
-            Ok,
-            Warning,
-            Error
-        }
-        public struct StateCheckItem
+        public enum BusActionType 
         {
-            public StateCheckItem(string name) {
-                Name = name;
-                Level = ActionStatus.Error;
-            }
-            
-            public string Name;
-
-            public ActionStatus Level;
+            TimeEvent,
+            Communication
+        }
+        public struct BusAction {
+            public BusActionType type;
+            public object Message;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class HandModule: IControllModule
+        public partial class HandModule: IControllModule
         {
             private HandSettings _settings;
             private MyGridProgram _program;
@@ -31,14 +31,21 @@ namespace IngameScript
             private List<IMyMotorStator> _handMainRotors;
             private IMyMotorStator _handMainRotor;
 
+            public SequenceExecutor _handPositionController;
+
             public HandModule(HandSettings settings, MyGridProgram program, ILogger logger) {
                 _settings = settings;
                 _program = program;
                 _logger = logger;
 
+                _handPositionController = new SequenceExecutor(_logger);
+
                 _handPistons = new List<IMyPistonBase>();
                 _handMainRotors = new List<IMyMotorStator>();
+                State = ModuleState.JustCreated;
             }
+
+            public ModuleState State { get; set; }
 
             public List<StateCheckItem> Initialize(List<StateCheckItem> checkList)
             {
@@ -50,7 +57,7 @@ namespace IngameScript
                 }
                 if (_handPistons.Count > 0)
                 {
-                    pistonCount.Level = ModuleState.Ok;
+                    pistonCount.Level = ActionStatus.Ok;
                     _logger.LogInformation($"Found {_handPistons.Count} pistons with sufix {_settings.PistonSufix}");
                 }
                 checkList.Add(pistonCount);
@@ -61,10 +68,12 @@ namespace IngameScript
                 {
                     _logger.LogError($"Wrong rotor count with sufix {_settings.RotorSufix} found {_handMainRotors.Count } expected 1");
                 } else {
-                    rotorCount.Level = ModuleState.Ok;
+                    rotorCount.Level = ActionStatus.Ok;
                     _handMainRotor = _handMainRotors[0];
                 }
                 checkList.Add(rotorCount);
+
+                State = checkList.Any(c => c.Level == ActionStatus.Error) ? ModuleState.NonFunctional : ModuleState.Initialized;
 
                 return checkList;
             }
