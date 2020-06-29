@@ -73,7 +73,7 @@ namespace IngameScript
                 }
 
                 //move under communication bus
-                Runtime.UpdateFrequency |= _handModule._handPositionController.ContinueSequence(UpdateFrequency.Update1);
+                Runtime.UpdateFrequency |= _handModule._handPositionController.ContinueSequence(updateSource);
             }
             catch (Exception e) {
                 _logger.LogInformation(e.Message);

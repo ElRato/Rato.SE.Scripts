@@ -9,6 +9,7 @@
     <Import_RootNamespace>IngameScript</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\TickTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\EventProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\CommunicationBus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\SequenceExecutor.cs" />

@@ -23,8 +23,9 @@ namespace IngameScript
     {
         public interface IControllModule
         {
-            List<StateCheckItem> Initialize(List<StateCheckItem> checkList);
+            void Initialize(List<StateCheckItem> checkList);
             ModuleState State { get; set; }
+            List<StateCheckItem> StateDetails { get; set; }
 
             UpdateFrequency StartTestSquence();
 

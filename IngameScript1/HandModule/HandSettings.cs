@@ -17,6 +17,12 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
+/*
+[HandSettings]
+PistonSufix=hnd
+PistonMaxSpeed=0.5
+RotorSufix=hnd
+*/
 namespace IngameScript
 {
     partial class Program
@@ -26,14 +32,7 @@ namespace IngameScript
             public string PistonSufix;
             public string RotorSufix;
             public double PistonMaxSpeed;
-            
 
-            /*
-            [HandSettings]
-            PistonSufix=hnd
-            PistonMaxSpeed=0.5
-            RotorSufix=hnd
-            */
             public void LoadValues(MyIni config)
             {
                 PistonSufix = config.Get(nameof(HandSettings), nameof(PistonSufix)).ToString();

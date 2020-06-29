@@ -16,6 +16,8 @@ using VRage.Game.ObjectBuilders.Definitions;
 using VRage.Game;
 using VRage;
 using VRageMath;
+using System.Data;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace IngameScript
 {
@@ -23,14 +25,14 @@ namespace IngameScript
     {
         public enum SequenceExecutorState
         {
-            Waiting,
+            InProgress,
             NoOperation
         }
         public class SequenceExecutor
         {
             private IEnumerator<int> _currentSequence;
-            private int _ticksFromLastStep;
-            private int _delayBeforeNextStepl;
+            private TickTimer _timer;
+
             private ILogger _logger;
             public SequenceExecutorState State { get; set; }
 
@@ -38,49 +40,51 @@ namespace IngameScript
             {
                 _logger = logger;
                 State = SequenceExecutorState.NoOperation;
+                _timer = new TickTimer(_logger);
             }
             public UpdateFrequency StartSequence(IEnumerator<int> sequence)
             {
-                _logger.LogInformation("StartedSequence");
+                _logger.LogInformation("Started Sequence");
                 if (sequence == null)
-                    return UpdateFrequency.None;
+                    throw new ArgumentException("Should be not null", nameof(sequence));
 
                 _currentSequence = sequence;
-                State = SequenceExecutorState.Waiting;
+
                 return ProcessStep();
             }
 
-            public UpdateFrequency ContinueSequence(UpdateFrequency updateEvent)
+            public UpdateFrequency ContinueSequence(UpdateType updateEvent)
             {
-                if (State == SequenceExecutorState.NoOperation)
+                if (State == SequenceExecutorState.NoOperation) {
+                    _logger.LogInformation("No Action");
                     return UpdateFrequency.None;
-
-                _logger.LogInformation("ContinueSequence");
-                if ((updateEvent | UpdateFrequency.Update1) >0)
-                {
-                    _logger.LogInformation($"Check ticks {_ticksFromLastStep} of {_delayBeforeNextStepl}");
-                    _ticksFromLastStep++;
-                    if (_ticksFromLastStep >= _delayBeforeNextStepl)
-                    {
-                        _logger.LogInformation($"TryNextStep");
-                        return ProcessStep();
-                    }
                 }
-                return UpdateFrequency.Update1;
+
+                _logger.LogInformation("Continue Sequence");
+
+                var nextDelay = _timer.TickNext(updateEvent);
+
+                _logger.LogInformation($"Ticks left {_timer.ActualTics} of {_timer.TargetTics}");
+
+                if (nextDelay == UpdateFrequency.None) {
+                    return ProcessStep();
+                }
+
+                return nextDelay;
             }
 
-            private UpdateFrequency ProcessStep() {
+            private UpdateFrequency ProcessStep()
+            {
                 _logger.LogInformation("ProcessStep");
                 if (_currentSequence.MoveNext())
                 {
                     _logger.LogInformation("Has next Step");
-                    _ticksFromLastStep = 0;
-                    _delayBeforeNextStepl = _currentSequence.Current;
-                    return UpdateFrequency.Update1;
+                    State = SequenceExecutorState.InProgress;
+                    return _timer.StartTimer(_currentSequence.Current);
                 }
                 else
                 {
-                    _logger.LogInformation("StopExecuton");
+                    _logger.LogInformation("Stop Executon");
                     State = SequenceExecutorState.NoOperation;
                     return UpdateFrequency.None;
                 }
