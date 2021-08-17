@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Dril", "Rato.SE.Dril\Rato.SE.Dril.csproj", "{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.Tools", "Rato.SE.Tools\Rato.SE.Tools.shproj", "{DF5EAB4F-4B18-43D5-8CA2-897322478619}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Rato.SE.Tools\Rato.SE.Tools.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
+		Rato.SE.Tools\Rato.SE.Tools.projitems*{df5eab4f-4b18-43d5-8ca2-897322478619}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|x64.ActiveCfg = Debug|x64
+		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5824C730-2357-410A-AF15-D870BBEF0362}
+	EndGlobalSection
+EndGlobal
