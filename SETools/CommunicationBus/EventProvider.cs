@@ -27,7 +27,7 @@ namespace IngameScript
             Communication
         }
         public struct BusAction {
-            public BusActionType type;
+            public BusActionType Type;
             public object Message;
         }
     }
