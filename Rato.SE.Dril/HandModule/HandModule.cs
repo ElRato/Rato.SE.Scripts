@@ -54,7 +54,13 @@ namespace IngameScript
 
             public UpdateFrequency ContinueSquence(UpdateType updateSource)
             {
+                _logger.LogInformation($"Hand position controller state:{_handPositionController.State}");
                 return _handPositionController.ContinueSequence(updateSource);
+            }
+
+            public UpdateFrequency AutoStart() {
+                State = ModuleState.Active;
+                return HoldElevation();
             }
 
             private void SetPistonsVelocity(float velocity)
@@ -66,29 +72,31 @@ namespace IngameScript
             }
             public UpdateFrequency TerminalAction(UpdateType updateSource, string Argument)
             {
+                _logger.LogInformation("Hand awaked");
                 var updateFrequency = UpdateFrequency.None;
+
                 if (Argument.StartsWith("Hand") && (updateSource | UpdateType.Terminal | UpdateType.Trigger) > 0)
                 {
                     //[TODO] Add Planetary elevation controll
                     //[TODO] Add Go to top
                     //[TODO] Add Go to horizontaldig - can be configured only manually
-                    
-                    if (_handPositionController.State == SequenceExecutorState.NoOperation)
-                    {
-                        updateFrequency = HoldElevation();
-                    }
+
                     if (Argument == "Hand.Elevation.Inc")
                     {
-                        _settings.TargetElevation = MathHelper.WrapAngle(_handMainRotor.Angle) + MathHelper.ToRadians(5) * _settings.RotateDirection;
-                        //[TODO] add max range controll
+                        _settings.TargetElevation +=_settings.RotateStep;
                     }
                     if (Argument == "Hand.Elevation.Dec")
                     {
-                        _settings.TargetElevation = MathHelper.WrapAngle(_handMainRotor.Angle) - MathHelper.ToRadians(5) * _settings.RotateDirection;
+                        _settings.TargetElevation -= _settings.RotateStep;
                     }
                     if (Argument == "Hand.Stop")
                     {
-                        updateFrequency = _handPositionController.StopExecution();
+                        updateFrequency = _handPositionController.StopSequence();
+                        SetPistonsVelocity(0);
+                    }
+                    if (Argument == "Hand.HoldElevation")
+                    {
+                        updateFrequency = HoldElevation();
                     }
                 }
 

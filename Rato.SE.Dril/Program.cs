@@ -39,8 +39,8 @@ namespace IngameScript
             _stateLcd = new LcdTextLogger(this, "System", lcd);
 
             _settingsHandler = new SettingsHandler(this);
-            _handSettings = _settingsHandler.ReadSettings<HandSettings>(_handSettings);
-            _debuggerSettings = _settingsHandler.ReadSettings<DebuggerSettings>(_debuggerSettings);
+            _handSettings = _settingsHandler.ReadFromStore<HandSettings>(_handSettings);
+            _debuggerSettings = _settingsHandler.ReadFromStore<DebuggerSettings>(_debuggerSettings);
 
             _communicationBus = new CommunicationBus(_debuggerSettings, _logger);
             _handModule = new HandModule(_handSettings, this, _logger);
@@ -52,28 +52,46 @@ namespace IngameScript
 
         public void Save()
         {
+            _settingsHandler.Save();
         }
 
         public void Main(string argument, UpdateType updateSource)
         {
             try
             {
-                if (argument == "Action.Reconfigure")
+                if (argument == "Action.SettingsTemplate")
                 {
                     _logger.LogInformation("Reset Setting");
-                    _settingsHandler.ResetToManual();
-                    _handSettings = _settingsHandler.ReadSettings(_handSettings);
-                    _debuggerSettings = _settingsHandler.ReadSettings(_debuggerSettings);
-                    _stateLcd.LogInformation("Reconfiguration");
+
+                    _settingsHandler.WriteToStore(_handSettings);
+                    _settingsHandler.WriteToStore(_debuggerSettings);
+                    _settingsHandler.SaveToUserStorage();
+                    _stateLcd.LogInformation("Settings template updated");
+                }
+
+                if (argument == "Action.Init")
+                {
+                    _stateLcd.LogInformation("Initialize");
                     _communicationBus.Initialize();
                     Runtime.UpdateFrequency = _communicationBus.StartSelfTest();
                     throw new Exception("CatchMe");
+                }
+
+                if (argument == "Action.Reconfigure")
+                {
+                    _logger.LogInformation("Reset Setting");
+                    _settingsHandler.LoadFromUserStorage();
+                    _handSettings = _settingsHandler.ReadFromStore(_handSettings);
+                    _debuggerSettings = _settingsHandler.ReadFromStore(_debuggerSettings);
+                    _stateLcd.LogInformation("Reconfiguration");
+                    Save();
                 }
 
                 //[TODO] Make communication between modules.
                 //[TODO] Make Controller for automatic drilling - possiblyh it should be external?
                 Runtime.UpdateFrequency = _communicationBus.TerminalAction(updateSource, argument);
                 Runtime.UpdateFrequency |= _communicationBus.Update(updateSource);
+                Runtime.UpdateFrequency |= _communicationBus.Autostart(updateSource);
 
                 //[TODO] Include cleanup into logger function
                 Me.GetSurface(0).WriteText($"", false);

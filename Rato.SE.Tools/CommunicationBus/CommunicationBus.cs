@@ -68,6 +68,20 @@ namespace IngameScript
                 return updateFrequency;
             }
 
+            public UpdateFrequency Autostart(UpdateType currentHit) {
+                var updateHit = currentHit | (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100);
+
+                var updateFrequency = UpdateFrequency.None;
+                foreach (var module in _modules.Values)
+                {
+                    //[TODO]Stop this check if all was processes
+                    if (module.State == ModuleState.WaitToAutostart) {
+                        updateFrequency |= module.AutoStart();
+                    }
+                }
+                return updateFrequency;
+            }
+
             public UpdateFrequency Update(UpdateType currentHit)
             {
                 var updateHit = currentHit | (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100);

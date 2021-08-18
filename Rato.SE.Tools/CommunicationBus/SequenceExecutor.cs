@@ -43,10 +43,8 @@ namespace IngameScript
                 _timer = new TickTimer(_logger);
             }
 
-            public UpdateFrequency StopExecution() {
-                _logger.LogInformation("Stop Executon");
-                State = SequenceExecutorState.NoOperation;
-                return UpdateFrequency.None;
+            public UpdateFrequency StopSequence() {
+                return StopExecution();
             }
 
             public UpdateFrequency StartSequence(IEnumerator<int> sequence)
@@ -56,7 +54,6 @@ namespace IngameScript
                     throw new ArgumentException("Should be not null", nameof(sequence));
 
                 _currentSequence = sequence;
-
                 return ProcessStep();
             }
 
@@ -80,20 +77,34 @@ namespace IngameScript
                 return nextDelay;
             }
 
+            private UpdateFrequency ContinueExecution()
+            {
+                _logger.LogInformation("Continue execution");
+                State = SequenceExecutorState.InProgress;
+                return _timer.StartTimer(_currentSequence.Current);
+            }
+
+            private UpdateFrequency StopExecution()
+            {
+                _logger.LogInformation("Stop Executon");
+                State = SequenceExecutorState.NoOperation;
+                return UpdateFrequency.None;
+            }
+
+
             private UpdateFrequency ProcessStep()
             {
                 _logger.LogInformation("ProcessStep");
                 if (_currentSequence.MoveNext())
                 {
-                    _logger.LogInformation("Continue execution");
-                    State = SequenceExecutorState.InProgress;
-                    return _timer.StartTimer(_currentSequence.Current);
+                    return ContinueExecution();
                 }
                 else
                 {
                     return StopExecution();
                 }
             }
+
         }
     }
 }

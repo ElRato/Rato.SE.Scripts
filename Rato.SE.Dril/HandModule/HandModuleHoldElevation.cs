@@ -32,27 +32,45 @@ namespace IngameScript
             private IEnumerator<int> HoldElevationSequence()
             {
                 var testVelocity = (float)_settings.PistonMaxSpeed / 2;
-
+                var accuracy = _settings.RotateStep;
+                
                 while (true)
                 {
-                    var rotorAngle = MathHelper.WrapAngle(_handMainRotor.Angle);
-                    var diff = rotorAngle - _settings.TargetElevation;
-                    var accuracy = MathHelper.ToRadians(2);
+                    var targetAngle = (_settings.TargetElevation + _settings.MinAngle) % MathHelper.TwoPi;
+                    var rotorAngle = _handMainRotor.Angle;
+                    var diff = targetAngle - rotorAngle;
+                    _logger.LogInformation($"target angle {Math.Round(targetAngle,3)}");
+                    _logger.LogInformation($"target alevation {Math.Round(_settings.TargetElevation,3)}");
+                    _logger.LogInformation($"current angle {Math.Round(rotorAngle,3)}");
+                    _logger.LogInformation($"diff = {Math.Round(Math.Abs(diff),3)}");
 
-                    if (diff > accuracy)
-                        SetPistonsVelocity(-(testVelocity * _settings.RotateDirection));
-                    if (diff < -accuracy)
-                        SetPistonsVelocity((testVelocity * _settings.RotateDirection));
+
                     if (Math.Abs(diff) <= accuracy)
+                    {
                         SetPistonsVelocity(0);
+                        _logger.LogInformation($"Stop piston");
+                    }
+                    else
+                    {
+                        if (diff > MathHelper.Pi)
+                        {
+                            diff -= MathHelper.TwoPi;
+                        }
+                        else if (diff <= -MathHelper.Pi)
+                        {
+                            diff += MathHelper.TwoPi;
+                        }
 
-                    _logger.LogInformation($"current angle {rotorAngle}");
-                    _logger.LogInformation($"target angle { _settings.TargetElevation}");
-                    _logger.LogInformation($"max angle { _settings.MaxAngle}");
-                    _logger.LogInformation($"min angle { _settings.MinAngle}");
-                    _logger.LogInformation($"diff = {diff}");
-                    _logger.LogInformation($"diff accuracy = {accuracy}");
-
+                        if (diff > 0)
+                        {
+                            SetPistonsVelocity((testVelocity * _settings.RotateDirection));
+                            _logger.LogInformation($"Up piston");
+                        }
+                        else {
+                            SetPistonsVelocity((-testVelocity * _settings.RotateDirection));
+                            _logger.LogInformation($"Down piston");
+                        }
+                    }
                     yield return 1;
                 }
             }
