@@ -36,37 +36,39 @@ namespace IngameScript
 
                 SetPistonsVelocity(testVelocity);
 
-                yield return 100;
+                yield return 10;
 
                 while (Math.Abs(previousAngle - _handMainRotor.Angle) > 0.0001)
                 {
                     previousAngle = _handMainRotor.Angle;
                     _logger.LogInformation($"current angle {previousAngle}");
-                    yield return 1;
+                    yield return 20;
                 }
 
-                _settings.MaxAngle = MathHelper.WrapAngle(_handMainRotor.Angle);
+                _settings.MaxAngle = _handMainRotor.Angle;
 
                 SetPistonsVelocity(-testVelocity);
                 
-                yield return 100;
+                yield return 10;
 
                 while (Math.Abs(previousAngle - _handMainRotor.Angle) > 0.0001)
                 {
                     previousAngle = _handMainRotor.Angle;
                     _logger.LogInformation($"current angle {previousAngle}");
-                    yield return 1;
+                    yield return 20;
                 }
 
-                _settings.MinAngle = MathHelper.WrapAngle(_handMainRotor.Angle);
-                if (_settings.MinAngle > _settings.MaxAngle) {
-                    /*
-                    var t = _settings.MinAngle;
-                    _settings.MinAngle = _settings.MaxAngle;
-                    _settings.MaxAngle = t;
-                    */
-                    _settings.RotateDirection = -1;
+                _settings.MinAngle = _handMainRotor.Angle;
+
+                if (Math.Abs(_settings.MaxAngle - _settings.MinAngle) > MathHelper.Pi)
+                {
+                    _settings.RotateAngleTotal = _settings.MaxAngle - (_settings.MinAngle - MathHelper.TwoPi);
                 }
+                else {
+                    _settings.RotateAngleTotal = _settings.MaxAngle - _settings.MinAngle;
+                }
+
+                _settings.RotateStep = _settings.RotateAngleTotal / 20;
 
                 _logger.LogInformation($"Max rotor angle = {_settings.MaxAngle}");
                 _logger.LogInformation($"Min rotor angle = {_settings.MinAngle}");
@@ -80,7 +82,7 @@ namespace IngameScript
                     Level = ActionStatus.Ok
                 });
 
-                State = ModuleState.Active;
+                State = ModuleState.WaitToAutostart;
             }
         }
     }

@@ -19,7 +19,8 @@ namespace IngameScript
 {
     partial class Program
     {
-        public interface ISettings{
+        public interface ISettings
+        {
             void LoadValues(MyIni config);
             void WriteValues(MyIni config);
         }
@@ -28,31 +29,48 @@ namespace IngameScript
         {
             private MyIni _ini = new MyIni();
 
-            
             Program _program;
             public SettingsHandler(Program program)
             {
                 _program = program;
-                
+
                 string stringSettings = string.IsNullOrWhiteSpace(_program.Storage)
                     ? _program.Me.CustomData
                     : _program.Storage;
                 ResetStore(stringSettings);
             }
 
-            public T ReadSettings<T>(T settings) where T : ISettings, new()
+            public T ReadFromStore<T>(T settings) where T : ISettings, new()
             {
-                if(settings == null)
+                if (settings == null)
                     settings = new T();
                 settings.LoadValues(_ini);
                 return settings;
             }
 
-            public void ResetToManual() {
-                ResetStore(_program.Me.CustomData);
+            public void Save()
+            {
+                _program.Storage = _ini.ToString();
             }
 
-            private void ResetStore(string store) {
+            public void WriteToStore<T>(T settings) where T : ISettings, new()
+            {
+                if (settings == null)
+                    settings = new T();
+                settings.WriteValues(_ini);
+            }
+
+            public void LoadFromUserStorage()
+            {
+                ResetStore(_program.Me.CustomData);
+            }
+            public void SaveToUserStorage()
+            {
+                _program.Me.CustomData = _ini.ToString();
+            }
+
+            private void ResetStore(string store)
+            {
                 MyIniParseResult result;
                 if (!_ini.TryParse(store, out result))
                     throw new Exception(result.ToString());

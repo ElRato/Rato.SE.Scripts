@@ -33,7 +33,7 @@ namespace IngameScript
 
             public void WriteValues(MyIni config)
             {
-                config.Set(nameof(HandSettings), nameof(SilentlyCatch), SilentlyCatch);
+                config.Set(nameof(DebuggerSettings), nameof(SilentlyCatch), SilentlyCatch);
             }
         }
     }

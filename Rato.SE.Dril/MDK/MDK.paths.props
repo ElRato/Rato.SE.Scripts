@@ -9,7 +9,7 @@
     <MDKUseGameBinPath>no</MDKUseGameBinPath>
     <MDKGameBinPath>c:\program files (x86)\steam\SteamApps\common\SpaceEngineers\Bin64</MDKGameBinPath>
     <MDKInstallPath>c:\users\admin\appdata\local\microsoft\visualstudio\16.0_6e6c82fd\extensions\nysfqp1f.iwc</MDKInstallPath>
-    <MDKOutputPath>C:\Users\ElRato\AppData\Roaming\SpaceEngineers\IngameScripts\local</MDKOutputPath>
+    <MDKOutputPath>C:\Users\admin\AppData\Roaming\SpaceEngineers\IngameScripts\local</MDKOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sandbox.Common">

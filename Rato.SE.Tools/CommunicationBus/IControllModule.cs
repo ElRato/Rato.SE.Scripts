@@ -29,6 +29,7 @@ namespace IngameScript
 
             UpdateFrequency StartTestSquence();
             UpdateFrequency ContinueSquence(UpdateType updateSource);
+            UpdateFrequency AutoStart();
             UpdateFrequency TerminalAction(UpdateType updateSource, string Argument);
         }
 
@@ -42,6 +43,7 @@ namespace IngameScript
             public static readonly ModuleState Initialized = new InitializedState();
             public static readonly ModuleState SelfTest = new SelfTestState();
             public static readonly ModuleState Active = new ActiveState();
+            public static readonly ModuleState WaitToAutostart = new WaitForAutostartState();
             public static readonly ModuleState NonFunctional = new NonFunctionalState();
 
             public override bool Equals(object obj)
@@ -109,6 +111,15 @@ namespace IngameScript
                 }
             }
 
+            private class WaitForAutostartState : ModuleState
+            {
+                public WaitForAutostartState()
+                {
+                    Name = nameof(WaitForAutostartState);
+                    FullyOperatable = false;
+                    IncludeToUpdateSequence = true;
+                }
+            }
         }
     }
 }
