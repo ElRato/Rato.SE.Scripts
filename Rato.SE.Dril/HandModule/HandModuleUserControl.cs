@@ -43,6 +43,7 @@ namespace IngameScript
                     }
                     if (controller == null)
                     {
+                        SetPistonsVelocity(0);
                         yield return 100;
                     }
                     else
