@@ -29,6 +29,7 @@ namespace IngameScript
 
             private List<IMyPistonBase> _handPistons;
             private List<IMyMotorStator> _handMainRotors;
+            private List<IMyShipController> _shipControllers;
             private IMyMotorStator _handMainRotor;
 
             public SequenceExecutor _handPositionController;
@@ -47,6 +48,7 @@ namespace IngameScript
 
                 _handPistons = new List<IMyPistonBase>();
                 _handMainRotors = new List<IMyMotorStator>();
+                _shipControllers = new List<IMyShipController>();
 
                 StateDetails = new List<ModuleStateDetail>();
                 State = ModuleState.JustCreated;
@@ -97,6 +99,10 @@ namespace IngameScript
                     if (Argument == "Hand.HoldElevation")
                     {
                         updateFrequency = HoldElevation();
+                    }
+                    if (Argument == "Hand.UserControl")
+                    {
+                        updateFrequency = UserControl();
                     }
                 }
 

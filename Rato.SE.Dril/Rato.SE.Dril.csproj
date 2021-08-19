@@ -39,6 +39,7 @@
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
     <Compile Include="HandModule\HandModule.cs" />
+    <Compile Include="HandModule\HandModuleUserControl.cs" />
     <Compile Include="HandModule\HandModuleInitialize.cs" />
     <Compile Include="HandModule\HandModuleHoldElevation.cs" />
     <Compile Include="HandModule\HandModuleSelfTest.cs" />

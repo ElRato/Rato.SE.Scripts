@@ -52,6 +52,19 @@ namespace IngameScript
                 }
                 StateDetails.Add(rotorCount);
 
+                var controllerCount = new ModuleStateDetail("Controllers");
+                _program.GridTerminalSystem.GetBlocksOfType(_shipControllers, p => p.CustomName.Contains(_settings.ControllerSufix));
+                if (_shipControllers.Count == 0)
+                {
+                    _logger.LogWarning($"Ship controller with sufix {_settings.ControllerSufix} found. Expected more than 1");
+                    controllerCount.Level = ActionStatus.Warning;
+                }
+                else
+                {
+                    controllerCount.Level = ActionStatus.Ok;
+                }
+                StateDetails.Add(controllerCount);
+
                 State = StateDetails.Any(c => c.Level == ActionStatus.Error) ? ModuleState.NonFunctional : ModuleState.Initialized;
             }
         }

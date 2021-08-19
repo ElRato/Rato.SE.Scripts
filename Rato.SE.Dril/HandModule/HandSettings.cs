@@ -31,7 +31,9 @@ namespace IngameScript
         {
             public string PistonSufix;
             public string RotorSufix;
+            public string ControllerSufix;
             public double PistonMaxSpeed;
+            public double UserControlSpeedMultiplier;
 
             public double MaxAngle;
             public double MinAngle;
@@ -43,7 +45,9 @@ namespace IngameScript
             public void LoadValues(MyIni config)
             {
                 PistonSufix = config.Get(nameof(HandSettings), nameof(PistonSufix)).ToString("hnd");
+                ControllerSufix = config.Get(nameof(HandSettings), nameof(ControllerSufix)).ToString("hnd");
                 PistonMaxSpeed = config.Get(nameof(HandSettings), nameof(PistonMaxSpeed)).ToDouble(0.5);
+                UserControlSpeedMultiplier = config.Get(nameof(HandSettings), nameof(UserControlSpeedMultiplier)).ToDouble(0.01);
                 RotorSufix = config.Get(nameof(HandSettings), nameof(RotorSufix)).ToString("hnd");
                 MaxAngle = config.Get(nameof(HandSettings), nameof(MaxAngle)).ToDouble(0);
                 MinAngle = config.Get(nameof(HandSettings), nameof(MinAngle)).ToDouble(0);
@@ -56,7 +60,9 @@ namespace IngameScript
             public void WriteValues(MyIni config)
             {
                 config.Set(nameof(HandSettings), nameof(PistonSufix), PistonSufix);
+                config.Set(nameof(HandSettings), nameof(ControllerSufix), ControllerSufix);
                 config.Set(nameof(HandSettings), nameof(PistonMaxSpeed), PistonMaxSpeed);
+                config.Set(nameof(HandSettings), nameof(UserControlSpeedMultiplier), UserControlSpeedMultiplier);
                 config.Set(nameof(HandSettings), nameof(RotorSufix), RotorSufix);
                 config.Set(nameof(HandSettings), nameof(MaxAngle), MaxAngle);
                 config.Set(nameof(HandSettings), nameof(MinAngle), MinAngle);
