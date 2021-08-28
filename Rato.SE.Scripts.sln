@@ -7,8 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Dril", "Rato.SE.Dri
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.Tools", "Rato.SE.Tools\Rato.SE.Tools.shproj", "{DF5EAB4F-4B18-43D5-8CA2-897322478619}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.HandModule", "Rato.SE.HandModule\Rato.SE.HandModule.shproj", "{30D9795E-A035-4F5E-83E1-1E211E7BCA0A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Rato.SE.HandModule\Rato.SE.HandModule.projitems*{30d9795e-a035-4f5e-83e1-1e211e7bca0a}*SharedItemsImports = 13
+		Rato.SE.HandModule\Rato.SE.HandModule.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
 		Rato.SE.Tools\Rato.SE.Tools.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
 		Rato.SE.Tools\Rato.SE.Tools.projitems*{df5eab4f-4b18-43d5-8ca2-897322478619}*SharedItemsImports = 13
 	EndGlobalSection

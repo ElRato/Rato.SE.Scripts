@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>30d9795e-a035-4f5e-83e1-1e211e7bca0a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Rato.SE.HandModule</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)HandModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandModuleHoldElevation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandModuleInitialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandModuleSelfTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandModuleUserControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandSettings.cs" />
+  </ItemGroup>
+</Project>
