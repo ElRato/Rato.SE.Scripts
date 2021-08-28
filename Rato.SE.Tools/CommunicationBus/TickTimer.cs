@@ -58,6 +58,10 @@ namespace IngameScript
 
             public UpdateFrequency TickNext(UpdateType currentHit)
             {
+                _logger.LogInformation($"Wait for 100 {_waitFor100}");
+                _logger.LogInformation($"Wait for 10 {_waitFor10}");
+                _logger.LogInformation($"Wait for 1 {_waitFor1}");
+
                 if ((currentHit | UpdateType.Update100) > 0 && _nextDelay == UpdateFrequency.Update100)
                     _waitFor100--;
                 if ((currentHit | UpdateType.Update10) > 0 && _nextDelay == UpdateFrequency.Update10)

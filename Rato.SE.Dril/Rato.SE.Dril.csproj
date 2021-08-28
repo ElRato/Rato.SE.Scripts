@@ -49,6 +49,12 @@
     <AdditionalFiles Include="Instructions.readme" />
     <AdditionalFiles Include="thumb.png" />
     <AdditionalFiles Include="MDK\whitelist.cache" />
+    <Compile Include="SolarTrack\SolarTrackModule.cs" />
+    <Compile Include="SolarTrack\SolarTrackInitialize.cs" />
+    <Compile Include="SolarTrack\SolarTrackTracking.cs" />
+    <Compile Include="SolarTrack\SolarTrackSelfTest.cs" />
+    <Compile Include="SolarTrack\SolarTrackSettings.cs" />
+    <Compile Include="SolarTrack\SolarTrackState.cs" />
   </ItemGroup>
   <Import Project="..\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
   <Import Project="..\Rato.SE.HandModule\Rato.SE.HandModule.projitems" Label="Shared" />

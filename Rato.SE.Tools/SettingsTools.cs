@@ -36,6 +36,10 @@ namespace IngameScript
                 ParseStore(_lowLevelStore.Read());
             }
 
+            public bool IsEmpty() {
+                return string.IsNullOrEmpty(_lowLevelStore.Read());
+            }
+
             public T ReadFromStore<T>(T settings) where T : IDataStore, new()
             {
                 if (settings == null)
