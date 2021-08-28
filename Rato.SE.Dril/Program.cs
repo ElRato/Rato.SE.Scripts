@@ -24,11 +24,9 @@ namespace IngameScript
     {
         private ILogger _logger;
         private ILogger _stateLcd;
+        private SystemControlUnit _scu;
+        private CommunicationBus _bus;
 
-        private SystemControlUnit _controlUnit;
-        
-        private CommunicationBus _communicationBus;
-        private HandModule _handModule;
 
         public Program()
         {
@@ -36,30 +34,33 @@ namespace IngameScript
             var lcd = Me.GetSurface(0);
             _stateLcd = new LcdTextLogger(this, "System", lcd);
 
-            _handModule = new HandModule(this, _logger);
-            _communicationBus = new CommunicationBus(_logger);
-            _communicationBus.AddModule("MainHand", _handModule);
-            
-            _controlUnit = new SystemControlUnit(_logger);
-            _controlUnit.UseCommunicationBus(_communicationBus);
-            _controlUnit.UseConfigStorage(new CustomDataLowLevelStore(Me));
-            _controlUnit.UseDurableStorage(new ProgramLowLevelStore(this));
+            //var handModule = new HandModule(this, _logger);
+            var solarModule = new SolarTrackModule(this, _logger);
 
-            Runtime.UpdateFrequency = _controlUnit.Initialize();
+            _bus = new CommunicationBus(_logger);
+            //_bus.AddModule("MainHand", handModule);
+            _bus.AddModule("SolarTrack", solarModule);
+
+            _scu = new SystemControlUnit(_logger);
+            _scu.UseCommunicationBus(_bus);
+            _scu.UseConfigStorage(new CustomDataLowLevelStore(Me));
+            _scu.UseDurableStorage(new ProgramLowLevelStore(this));
+
+            Runtime.UpdateFrequency = _scu.Initialize();
         }
 
-        public void Save() { 
-            _controlUnit.Save();
+        public void Save() {
+            _scu.Save();
         }
 
         public void Main(string argument, UpdateType updateSource)
         {
             try
             {
-                _controlUnit.RunIteration(updateSource, argument);
+                _scu.RunIteration(updateSource, argument);
                 //[TODO] Include cleanup into logger function
                 Me.GetSurface(0).WriteText($"", false);
-                _communicationBus.LogModuleState(_stateLcd);
+                _bus.LogModuleState(_stateLcd);
             }
             catch (Exception e) {
                 _logger.LogInformation(e.Message);
