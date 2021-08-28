@@ -26,9 +26,9 @@ namespace IngameScript
             Warning,
             Error
         }
-        public struct ModuleStateDetail
+        public struct ModuleStatusDetail
         {
-            public ModuleStateDetail(string name) {
+            public ModuleStatusDetail(string name) {
                 Name = name;
                 Level = ActionStatus.Error;
             }

@@ -25,9 +25,9 @@ namespace IngameScript
         {
             public void Initialize()
             {
-                StateDetails.Clear();
+                StatusDetails.Clear();
                 _program.GridTerminalSystem.GetBlocksOfType(_handPistons, p => p.CustomName.Contains(_settings.PistonSufix));
-                var pistonCount = new ModuleStateDetail("Hand Piston");
+                var pistonCount = new ModuleStatusDetail("Hand Piston");
                 if (_handPistons.Count == 0)
                 {
                     _logger.LogError($"Wrong rotor count with sufix {_settings.PistonSufix} found {_handPistons.Count } expected 1 and more");
@@ -37,9 +37,9 @@ namespace IngameScript
                     pistonCount.Level = ActionStatus.Ok;
                     _logger.LogInformation($"Found {_handPistons.Count} pistons with sufix {_settings.PistonSufix}");
                 }
-                StateDetails.Add(pistonCount);
+                StatusDetails.Add(pistonCount);
 
-                var rotorCount = new ModuleStateDetail("Hand Rotor");
+                var rotorCount = new ModuleStatusDetail("Hand Rotor");
                 _program.GridTerminalSystem.GetBlocksOfType(_handMainRotors, p => p.CustomName.Contains(_settings.RotorSufix));
                 if (_handMainRotors.Count != 1)
                 {
@@ -50,9 +50,9 @@ namespace IngameScript
                     rotorCount.Level = ActionStatus.Ok;
                     _handMainRotor = _handMainRotors[0];
                 }
-                StateDetails.Add(rotorCount);
+                StatusDetails.Add(rotorCount);
 
-                var controllerCount = new ModuleStateDetail("Controllers");
+                var controllerCount = new ModuleStatusDetail("Controllers");
                 _program.GridTerminalSystem.GetBlocksOfType(_shipControllers, p => p.CustomName.Contains(_settings.ControllerSufix));
                 if (_shipControllers.Count == 0)
                 {
@@ -63,9 +63,9 @@ namespace IngameScript
                 {
                     controllerCount.Level = ActionStatus.Ok;
                 }
-                StateDetails.Add(controllerCount);
+                StatusDetails.Add(controllerCount);
 
-                State = StateDetails.Any(c => c.Level == ActionStatus.Error) ? ModuleState.NonFunctional : ModuleState.Initialized;
+                Status = StatusDetails.Any(c => c.Level == ActionStatus.Error) ? ModuleStatus.NonFunctional : ModuleStatus.Initialized;
             }
         }
     }

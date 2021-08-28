@@ -22,7 +22,7 @@ namespace IngameScript
 {
     partial class Program
     {
-        public class DebuggerSettings : ISettings
+        public class DebuggerSettings : IDataStore
         {
             bool SilentlyCatch;
 

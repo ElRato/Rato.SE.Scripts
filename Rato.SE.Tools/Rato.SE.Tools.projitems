@@ -18,5 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DebuggerSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Loggers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsTools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SystemControlUnit\SystemControlUnit.cs" />
   </ItemGroup>
 </Project>

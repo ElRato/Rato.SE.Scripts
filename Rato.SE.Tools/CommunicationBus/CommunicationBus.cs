@@ -23,14 +23,12 @@ namespace IngameScript
     {
         public class CommunicationBus
         {
-            private DebuggerSettings _dbgSettings;
             private ILogger _logger;
-
+            
             private Dictionary<string, IControllModule> _modules;
 
-            public CommunicationBus(DebuggerSettings dbgSettings, ILogger logger)
+            public CommunicationBus(ILogger logger)
             {
-                _dbgSettings = dbgSettings;
                 _logger = logger;
                 _modules = new Dictionary<string, IControllModule>();
             }
@@ -61,22 +59,20 @@ namespace IngameScript
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
-                    if (module.State.IncludeToUpdateSequence)
-                        updateFrequency |= module.StartTestSquence();
+                    if (module.Status.IncludeToUpdateSequence && module is ISelfTestableModule)
+                        updateFrequency |= (module as ISelfTestableModule).StartTestSquence();
                 }
 
                 return updateFrequency;
             }
 
-            public UpdateFrequency Autostart(UpdateType currentHit) {
-                var updateHit = currentHit | (UpdateType.Update1 | UpdateType.Update10 | UpdateType.Update100);
-
+            public UpdateFrequency Autostart() {
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
                     //[TODO]Stop this check if all was processes
-                    if (module.State == ModuleState.WaitToAutostart) {
-                        updateFrequency |= module.AutoStart();
+                    if (module.Status == ModuleStatus.ReadyToStart) {
+                        updateFrequency |= (module as IAutoStartModule).AutoStart();
                     }
                 }
                 return updateFrequency;
@@ -89,7 +85,7 @@ namespace IngameScript
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
-                    if(module.State.IncludeToUpdateSequence)
+                    if(module.Status.IncludeToUpdateSequence)
                         updateFrequency |= module.ContinueSquence(updateHit);
                 }
                 return updateFrequency;
@@ -101,8 +97,8 @@ namespace IngameScript
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
-                    if (module.State.FullyOperatable)
-                        updateFrequency |= module.TerminalAction(updateHit, argument);
+                    if (module.Status.FullyOperatable && module is ITerminalModule)
+                        updateFrequency |= (module as ITerminalModule).TerminalAction(updateHit, argument);
                 }
                 return updateFrequency;
             }
@@ -110,8 +106,8 @@ namespace IngameScript
             public void LogModuleState(ILogger stateLogger) {
                 foreach (var module in _modules)
                 {
-                    stateLogger.LogInformation($"{module.Key}: {module.Value.State.Name}");
-                    foreach (var checkItem in module.Value.StateDetails)
+                    stateLogger.LogInformation($"{module.Key}: {module.Value.Status.Name}");
+                    foreach (var checkItem in module.Value.StatusDetails)
                     {
                         switch (checkItem.Level)
                         {
@@ -122,6 +118,50 @@ namespace IngameScript
                             case ActionStatus.Error:
                                 stateLogger.LogError($"{checkItem.Name}: Failed"); break;
                         }
+                    }
+                }
+            }
+            public bool SetConfig(DataStoreHandler dataStoreHandler)
+            {
+                var reinitRequired = false;
+                foreach (var module in _modules.Values)
+                {
+                    if (module is IConfigurableModule)
+                    {
+                        reinitRequired |= (module as IConfigurableModule).SetConfig(dataStoreHandler);
+                    }
+                }
+                return reinitRequired;
+            }
+            public bool SetState(DataStoreHandler dataStoreHandler)
+            {
+                var reinitRequired = false;
+                foreach (var module in _modules.Values)
+                {
+                    if (module is IConfigurableModule)
+                    {
+                        reinitRequired |= (module as IConfigurableModule).SetState(dataStoreHandler);
+                    }
+                }
+                return reinitRequired;
+            }
+            public void SaveConfig(DataStoreHandler dataStoreHandler)
+            {
+                foreach (var module in _modules.Values)
+                {
+                    if (module is IConfigurableModule)
+                    {
+                        (module as IConfigurableModule).SaveConfig(dataStoreHandler);
+                    }
+                }
+            }
+            public void SaveState(DataStoreHandler dataStoreHandler)
+            {
+                foreach (var module in _modules.Values)
+                {
+                    if (module is IConfigurableModule)
+                    {
+                        (module as IConfigurableModule).SaveState(dataStoreHandler);
                     }
                 }
             }
