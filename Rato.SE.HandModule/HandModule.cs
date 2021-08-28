@@ -21,9 +21,10 @@ namespace IngameScript
 {
     partial class Program
     {
-        public partial class HandModule : IControllModule
+        public partial class HandModule : IControllModule, ISelfTestableModule, IAutoStartModule, ITerminalModule, IConfigurableModule
         {
             private HandSettings _settings;
+            private HandState _state;
             private MyGridProgram _program;
             private ILogger _logger;
 
@@ -34,13 +35,12 @@ namespace IngameScript
 
             public SequenceExecutor _handPositionController;
 
-            public List<ModuleStateDetail> StateDetails { get; private set; }
+            public List<ModuleStatusDetail> StatusDetails { get; private set; }
 
-            public ModuleState State { get; set; }
+            public ModuleStatus Status { get; set; }
 
-            public HandModule(HandSettings settings, MyGridProgram program, ILogger logger)
+            public HandModule(MyGridProgram program, ILogger logger)
             {
-                _settings = settings;
                 _program = program;
                 _logger = logger;
 
@@ -50,8 +50,35 @@ namespace IngameScript
                 _handMainRotors = new List<IMyMotorStator>();
                 _shipControllers = new List<IMyShipController>();
 
-                StateDetails = new List<ModuleStateDetail>();
-                State = ModuleState.JustCreated;
+                StatusDetails = new List<ModuleStatusDetail>();
+                Status = ModuleStatus.JustCreated;
+
+                _settings = new HandSettings();
+                _state = new HandState();
+            }
+
+            public bool SetConfig(DataStoreHandler storeHandler)
+            {
+                _settings = storeHandler.ReadFromStore(_settings);
+                //[TODO] implement check for changed values
+                return false;
+            }
+
+            public bool SetState(DataStoreHandler storeHandler)
+            {
+                _state = storeHandler.ReadFromStore(_state);
+                //[TODO] implement check for changed values
+                return false;
+            }
+
+            public void SaveConfig(DataStoreHandler storeHandler)
+            {
+                storeHandler.WriteToStore(_settings);
+            }
+
+            public void SaveState(DataStoreHandler storeHandler)
+            {
+                storeHandler.WriteToStore(_state);
             }
 
             public UpdateFrequency ContinueSquence(UpdateType updateSource)
@@ -60,8 +87,9 @@ namespace IngameScript
                 return _handPositionController.ContinueSequence(updateSource);
             }
 
-            public UpdateFrequency AutoStart() {
-                State = ModuleState.Active;
+            public UpdateFrequency AutoStart()
+            {
+                Status = ModuleStatus.Active;
                 return HoldElevation();
             }
 
@@ -85,7 +113,7 @@ namespace IngameScript
 
                     if (Argument == "Hand.Elevation.Inc")
                     {
-                        _settings.TargetElevation +=_settings.RotateStep;
+                        _settings.TargetElevation += _settings.RotateStep;
                     }
                     if (Argument == "Hand.Elevation.Dec")
                     {

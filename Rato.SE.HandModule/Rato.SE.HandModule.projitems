@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)HandModuleInitialize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HandModuleSelfTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HandModuleUserControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HandSettings.cs" />
   </ItemGroup>
 </Project>

@@ -19,28 +19,24 @@ namespace IngameScript
 {
     partial class Program
     {
-        public interface ISettings
+        public interface IDataStore
         {
             void LoadValues(MyIni config);
             void WriteValues(MyIni config);
         }
 
-        public class SettingsHandler
+        public class DataStoreHandler
         {
             private MyIni _ini = new MyIni();
+            private LowLevelStore _lowLevelStore;
 
-            Program _program;
-            public SettingsHandler(Program program)
+            public DataStoreHandler(LowLevelStore lowLevelStore)
             {
-                _program = program;
-
-                string stringSettings = string.IsNullOrWhiteSpace(_program.Storage)
-                    ? _program.Me.CustomData
-                    : _program.Storage;
-                ResetStore(stringSettings);
+                _lowLevelStore = lowLevelStore;
+                ParseStore(_lowLevelStore.Read());
             }
 
-            public T ReadFromStore<T>(T settings) where T : ISettings, new()
+            public T ReadFromStore<T>(T settings) where T : IDataStore, new()
             {
                 if (settings == null)
                     settings = new T();
@@ -48,32 +44,62 @@ namespace IngameScript
                 return settings;
             }
 
-            public void Save()
-            {
-                _program.Storage = _ini.ToString();
-            }
-
-            public void WriteToStore<T>(T settings) where T : ISettings, new()
+            public void WriteToStore<T>(T settings) where T : IDataStore, new()
             {
                 if (settings == null)
                     settings = new T();
                 settings.WriteValues(_ini);
             }
-
-            public void LoadFromUserStorage()
+            public void Save()
             {
-                ResetStore(_program.Me.CustomData);
+                _lowLevelStore.Write(_ini.ToString());
             }
-            public void SaveToUserStorage()
-            {
-                _program.Me.CustomData = _ini.ToString();
-            }
-
-            private void ResetStore(string store)
+            private void ParseStore(string store)
             {
                 MyIniParseResult result;
                 if (!_ini.TryParse(store, out result))
                     throw new Exception(result.ToString());
+            }
+        }
+
+        public interface LowLevelStore {
+            string Read();
+            void Write(string value);
+        }
+
+        public class CustomDataLowLevelStore: LowLevelStore {
+            private IMyTerminalBlock _block;
+            public CustomDataLowLevelStore(IMyTerminalBlock block) {
+                _block = block;
+            }
+
+            public string Read()
+            {
+                return _block.CustomData;
+            }
+
+            public void Write(string value)
+            {
+                _block.CustomData = value;
+            }
+        }
+
+        public class ProgramLowLevelStore : LowLevelStore
+        {
+            private Program _program;
+            public ProgramLowLevelStore(Program program)
+            {
+                _program = program;
+            }
+
+            public string Read()
+            {
+                return _program.Storage;
+            }
+
+            public void Write(string value)
+            {
+                _program.Storage = value;
             }
         }
     }

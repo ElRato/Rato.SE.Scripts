@@ -21,34 +21,53 @@ namespace IngameScript
 {
     partial class Program
     {
-        public interface IControllModule
+        public interface ISelfTestableModule
         {
-            void Initialize();
-            ModuleState State { get; set; }
-            List<ModuleStateDetail> StateDetails { get; }
-
             UpdateFrequency StartTestSquence();
-            UpdateFrequency ContinueSquence(UpdateType updateSource);
+        }
+
+        public interface IAutoStartModule {
             UpdateFrequency AutoStart();
+        }
+
+        public interface ITerminalModule
+        {
             UpdateFrequency TerminalAction(UpdateType updateSource, string Argument);
         }
 
-        public abstract class ModuleState
+        public interface IConfigurableModule
+        {
+            bool SetConfig(DataStoreHandler storeHandler);
+            bool SetState(DataStoreHandler storeHandler);
+            void SaveConfig(DataStoreHandler storeHandler);
+            void SaveState(DataStoreHandler storeHandler);
+        }
+
+        public interface IControllModule
+        {
+            void Initialize();
+            ModuleStatus Status { get; set; }
+            List<ModuleStatusDetail> StatusDetails { get; }
+
+            UpdateFrequency ContinueSquence(UpdateType updateSource);
+        }
+
+        public abstract class ModuleStatus
         {
             public string Name { get; private set; }
             public bool FullyOperatable { get; private set; }
             public bool IncludeToUpdateSequence { get; private set; }
 
-            public static readonly ModuleState JustCreated = new JustCreatedState();
-            public static readonly ModuleState Initialized = new InitializedState();
-            public static readonly ModuleState SelfTest = new SelfTestState();
-            public static readonly ModuleState Active = new ActiveState();
-            public static readonly ModuleState WaitToAutostart = new WaitForAutostartState();
-            public static readonly ModuleState NonFunctional = new NonFunctionalState();
+            public static readonly ModuleStatus JustCreated = new JustCreatedState();
+            public static readonly ModuleStatus Initialized = new InitializedState();
+            public static readonly ModuleStatus SelfTest = new SelfTestState();
+            public static readonly ModuleStatus Active = new ActiveState();
+            public static readonly ModuleStatus ReadyToStart = new ReadyToStartState();
+            public static readonly ModuleStatus NonFunctional = new NonFunctionalState();
 
             public override bool Equals(object obj)
             {
-                return obj is ModuleState ? obj.ToString() == this.ToString() : base.Equals(obj);
+                return obj is ModuleStatus ? obj.ToString() == this.ToString() : base.Equals(obj);
             }
 
             public override int GetHashCode()
@@ -61,7 +80,7 @@ namespace IngameScript
                 return this.Name;
             }
 
-            private class ActiveState : ModuleState
+            private class ActiveState : ModuleStatus
             {
                 public ActiveState()
                 {
@@ -71,7 +90,7 @@ namespace IngameScript
                 }
             }
 
-            private class JustCreatedState : ModuleState
+            private class JustCreatedState : ModuleStatus
             {
                 public JustCreatedState()
                 {
@@ -81,7 +100,7 @@ namespace IngameScript
                 }
             }
 
-            private class InitializedState : ModuleState
+            private class InitializedState : ModuleStatus
             {
                 public InitializedState()
                 {
@@ -91,7 +110,7 @@ namespace IngameScript
                 }
             }
 
-            private class NonFunctionalState : ModuleState
+            private class NonFunctionalState : ModuleStatus
             {
                 public NonFunctionalState()
                 {
@@ -101,7 +120,7 @@ namespace IngameScript
                 }
             }
 
-            private class SelfTestState : ModuleState
+            private class SelfTestState : ModuleStatus
             {
                 public SelfTestState()
                 {
@@ -111,11 +130,11 @@ namespace IngameScript
                 }
             }
 
-            private class WaitForAutostartState : ModuleState
+            private class ReadyToStartState : ModuleStatus
             {
-                public WaitForAutostartState()
+                public ReadyToStartState()
                 {
-                    Name = nameof(WaitForAutostartState);
+                    Name = nameof(ReadyToStartState);
                     FullyOperatable = false;
                     IncludeToUpdateSequence = true;
                 }

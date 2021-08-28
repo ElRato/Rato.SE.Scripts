@@ -30,32 +30,32 @@ namespace IngameScript
 
             private IEnumerator<int> SelfTestSequence()
             {
-                State = ModuleState.SelfTest;
+                Status = ModuleStatus.SelfTest;
                 var testVelocity = (float)_settings.PistonMaxSpeed / 2;
                 var previousAngle = _handMainRotor.Angle;
 
                 SetPistonsVelocity(testVelocity);
 
-                yield return 10;
+                yield return 100;
 
                 while (Math.Abs(previousAngle - _handMainRotor.Angle) > 0.0001)
                 {
                     previousAngle = _handMainRotor.Angle;
                     _logger.LogInformation($"current angle {previousAngle}");
-                    yield return 20;
+                    yield return 10;
                 }
 
                 _settings.MaxAngle = _handMainRotor.Angle;
 
                 SetPistonsVelocity(-testVelocity);
                 
-                yield return 10;
+                yield return 100;
 
                 while (Math.Abs(previousAngle - _handMainRotor.Angle) > 0.0001)
                 {
                     previousAngle = _handMainRotor.Angle;
                     _logger.LogInformation($"current angle {previousAngle}");
-                    yield return 20;
+                    yield return 10;
                 }
 
                 _settings.MinAngle = _handMainRotor.Angle;
@@ -76,13 +76,13 @@ namespace IngameScript
 
                 SetPistonsVelocity(0);
 
-                StateDetails.Add(new ModuleStateDetail()
+                StatusDetails.Add(new ModuleStatusDetail()
                 {
                     Name = "Self test",
                     Level = ActionStatus.Ok
                 });
 
-                State = ModuleState.WaitToAutostart;
+                Status = ModuleStatus.ReadyToStart;
             }
         }
     }
