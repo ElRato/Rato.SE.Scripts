@@ -37,7 +37,7 @@ namespace IngameScript
                 Rotor2Sufix = config.Get(nameof(SolarTrackSettings), nameof(Rotor2Sufix)).ToString("slr_trk_2");
                 PannelSufix = config.Get(nameof(SolarTrackSettings), nameof(PannelSufix)).ToString("slr_trk_pnl");
                 TestSpeedDividor = config.Get(nameof(SolarTrackSettings), nameof(TestSpeedDividor)).ToInt32(4);
-                OperationSpeedDividor = config.Get(nameof(SolarTrackSettings), nameof(OperationSpeedDividor)).ToInt32(4*16);
+                OperationSpeedDividor = config.Get(nameof(SolarTrackSettings), nameof(OperationSpeedDividor)).ToInt32(8*16);
                 TunningTimeStep = config.Get(nameof(SolarTrackSettings), nameof(TunningTimeStep)).ToInt32(10);
                 TunningAccuracy = config.Get(nameof(SolarTrackSettings), nameof(TunningAccuracy)).ToDouble(0.00002);
             }

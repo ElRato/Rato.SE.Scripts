@@ -29,12 +29,35 @@ namespace IngameScript
                 return _trackController.StartSequence(TrackingSequence());
             }
 
+            private IEnumerable<int> WaitForOutputChange() {
+                var output = _pannel.MaxOutput;
+                while (output == _pannel.MaxOutput) {
+                    yield return 1;
+                }
+            }
+
+            private IEnumerable<int> RotorAdjust(IMyMotorStator rotor)
+            {
+                var accuracy = 0.0001;
+
+                var baseOutput = _pannel.MaxOutput;
+
+                foreach (var step in WaitForOutputChange()) yield return step;
+                if (_ratoMath.GreaterThen(baseOutput, _pannel.MaxOutput, accuracy))
+                {
+                    SetrotorVelocity(rotor, -rotor.TargetVelocityRad);
+                    baseOutput = _pannel.MaxOutput;
+                    foreach (var step in WaitForOutputChange()) yield return step;
+                }
+                while (_ratoMath.GreaterThen(_pannel.MaxOutput, baseOutput, accuracy))
+                {
+                    baseOutput = _pannel.MaxOutput;
+                    foreach (var step in WaitForOutputChange()) yield return step;
+                };
+            }
+
             private IEnumerator<int> TrackingSequence()
             {
-                var tunningStep = 5000;
-                var rotationSpeed1 = MathHelper.Pi / 4 / 16;
-                var rotationSpeed2 = rotationSpeed1;
-                var accuracy = 0.0001;
                 while (true)
                 {
                     if (_pannel.MaxOutput == 0)
@@ -43,39 +66,19 @@ namespace IngameScript
                     }
                     else
                     {
-                        var baseOutput = _pannel.MaxOutput;
 
-                        SetrotorVelocity(_rotor1, rotationSpeed1);
-                        yield return tunningStep;
-                        if (_ratoMath.GreaterThen(baseOutput, _pannel.MaxOutput, accuracy))
-                        {
-                            rotationSpeed1 = -rotationSpeed1;
-                            SetrotorVelocity(_rotor1, rotationSpeed1);
-                            baseOutput = _pannel.MaxOutput;
-                            yield return tunningStep;
-                        }
-                        while (_ratoMath.GreaterThen(_pannel.MaxOutput, baseOutput, accuracy)) {
-                            baseOutput = _pannel.MaxOutput;
-                            yield return tunningStep;
-                        }
+                        SetrotorVelocity(_rotor1, _state.Rotor1TrackDirection * MathHelper.Pi / _settings.OperationSpeedDividor);
+                        foreach (var step in RotorAdjust(_rotor1)) yield return step;
+                        _state.Rotor1TrackDirection = _rotor1.TargetVelocityRad > 0 ? 1 : -1;
                         SetrotorVelocity(_rotor1, 0);
 
-                        SetrotorVelocity(_rotor2, rotationSpeed2);
-                        yield return tunningStep;
-                        if (_ratoMath.GreaterThen(baseOutput, _pannel.MaxOutput, accuracy))
+                        if (_rotor2 != null)
                         {
-                            rotationSpeed2 = -rotationSpeed2;
-                            SetrotorVelocity(_rotor2, rotationSpeed2);
-                            baseOutput = _pannel.MaxOutput;
-                            yield return tunningStep;
+                            SetrotorVelocity(_rotor2, _state.Rotor2TrackDirection * MathHelper.Pi / _settings.OperationSpeedDividor);
+                            foreach (var step in RotorAdjust(_rotor2)) yield return step;
+                            _state.Rotor2TrackDirection = _rotor2.TargetVelocityRad > 0 ? 1 : -1;
+                            SetrotorVelocity(_rotor2, 0);
                         }
-                        while (_ratoMath.GreaterThen(_pannel.MaxOutput, baseOutput, accuracy))
-                        {
-                            baseOutput = _pannel.MaxOutput;
-                            yield return tunningStep;
-                        }
-                        SetrotorVelocity(_rotor2, 0);
-
                         yield return 5000;
                     }
                 }
