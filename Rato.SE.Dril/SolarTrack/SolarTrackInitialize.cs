@@ -34,10 +34,11 @@ namespace IngameScript
                 if (tempRotorList.Count != 1)
                 {
                     _logger.LogError($"Wrong rotor count with sufix {_settings.Rotor1Sufix} found {tempRotorList.Count } expected 1");
+                    rotor1Count.Level = ActionStatus.Error;
                 } else {
                     _rotor1 = tempRotorList.First();
                     rotor1Count.Level = ActionStatus.Ok;
-                    _logger.LogInformation($"Found {tempRotorList.Count} pistons with sufix {_settings.Rotor1Sufix}");
+                    _logger.LogInformation($"Found {tempRotorList.Count} rotors with sufix {_settings.Rotor1Sufix}");
                 }
                 StatusDetails.Add(rotor1Count);
 
@@ -45,13 +46,14 @@ namespace IngameScript
                 var rotor2Count = new ModuleStatusDetail("Rotor 2");
                 if (tempRotorList.Count != 1)
                 {
-                    _logger.LogError($"Wrong rotor count with sufix {_settings.Rotor2Sufix} found {tempRotorList.Count } expected 1");
+                    _logger.LogWarning($"Wrong rotor count with sufix {_settings.Rotor2Sufix} found {tempRotorList.Count } expected 1");
+                    rotor2Count.Level = ActionStatus.Warning;
                 }
                 else
                 {
                     _rotor2 = tempRotorList.First();
                     rotor2Count.Level = ActionStatus.Ok;
-                    _logger.LogInformation($"Found {tempRotorList.Count} pistons with sufix {_settings.Rotor2Sufix}");
+                    _logger.LogInformation($"Found {tempRotorList.Count} rotors with sufix {_settings.Rotor2Sufix}");
                 }
                 StatusDetails.Add(rotor2Count);
 

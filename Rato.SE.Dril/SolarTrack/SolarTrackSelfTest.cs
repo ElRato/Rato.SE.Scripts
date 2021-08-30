@@ -45,8 +45,11 @@ namespace IngameScript
                 var round1 = MakeFullRound(_rotor1);
                 while (round1.MoveNext()) yield return round1.Current;
 
-                var round2 = MakeFullRound(_rotor2);
-                while (round2.MoveNext()) yield return round2.Current;
+                if (_rotor2 != null)
+                {
+                    var round2 = MakeFullRound(_rotor2);
+                    while (round2.MoveNext()) yield return round2.Current;
+                }
 
                 StatusDetails.Add(new ModuleStatusDetail()
                 {

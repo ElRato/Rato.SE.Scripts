@@ -24,12 +24,18 @@ namespace IngameScript
     {
         public class SolarTrackState : IDataStore
         {
+            public int Rotor1TrackDirection;
+            public int Rotor2TrackDirection;
             public void LoadValues(MyIni config)
             {
+                Rotor1TrackDirection = config.Get(nameof(SolarTrackSettings), nameof(Rotor1TrackDirection)).ToInt32(1);
+                Rotor2TrackDirection = config.Get(nameof(SolarTrackSettings), nameof(Rotor2TrackDirection)).ToInt32(1);
             }
 
             public void WriteValues(MyIni config)
             {
+                config.Set(nameof(SolarTrackSettings), nameof(Rotor1TrackDirection), Rotor1TrackDirection);
+                config.Set(nameof(SolarTrackSettings), nameof(Rotor2TrackDirection), Rotor2TrackDirection);
             }
         }
     }
