@@ -81,7 +81,7 @@ namespace IngameScript
                 storeHandler.WriteToStore(_state);
             }
 
-            public UpdateFrequency ContinueSquence(UpdateType updateSource)
+            public UpdateFrequency ContinueSequence(UpdateType updateSource)
             {
                 _logger.LogInformation($"Hand position controller state:{_handPositionController.State}");
                 return _handPositionController.ContinueSequence(updateSource);

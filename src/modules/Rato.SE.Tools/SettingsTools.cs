@@ -28,9 +28,9 @@ namespace IngameScript
         public class DataStoreHandler
         {
             private MyIni _ini = new MyIni();
-            private LowLevelStore _lowLevelStore;
+            private ILowLevelStore _lowLevelStore;
 
-            public DataStoreHandler(LowLevelStore lowLevelStore)
+            public DataStoreHandler(ILowLevelStore lowLevelStore)
             {
                 _lowLevelStore = lowLevelStore;
                 ParseStore(_lowLevelStore.Read());
@@ -66,12 +66,12 @@ namespace IngameScript
             }
         }
 
-        public interface LowLevelStore {
+        public interface ILowLevelStore {
             string Read();
             void Write(string value);
         }
 
-        public class CustomDataLowLevelStore: LowLevelStore {
+        public class CustomDataLowLevelStore: ILowLevelStore {
             private IMyTerminalBlock _block;
             public CustomDataLowLevelStore(IMyTerminalBlock block) {
                 _block = block;
@@ -88,7 +88,7 @@ namespace IngameScript
             }
         }
 
-        public class ProgramLowLevelStore : LowLevelStore
+        public class ProgramLowLevelStore : ILowLevelStore
         {
             private Program _program;
             public ProgramLowLevelStore(Program program)

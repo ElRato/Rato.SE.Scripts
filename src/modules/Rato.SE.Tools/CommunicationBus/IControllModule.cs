@@ -49,7 +49,7 @@ namespace IngameScript
             ModuleStatus Status { get; set; }
             List<ModuleStatusDetail> StatusDetails { get; }
 
-            UpdateFrequency ContinueSquence(UpdateType updateSource);
+            UpdateFrequency ContinueSequence(UpdateType updateSource);
         }
 
         public abstract class ModuleStatus

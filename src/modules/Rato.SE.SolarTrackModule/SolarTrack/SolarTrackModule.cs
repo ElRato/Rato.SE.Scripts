@@ -78,7 +78,7 @@ namespace IngameScript
                 storeHandler.WriteToStore(_state);
             }
 
-            public UpdateFrequency ContinueSquence(UpdateType updateSource)
+            public UpdateFrequency ContinueSequence(UpdateType updateSource)
             {
                 _logger.LogInformation($"Solar Track controller state:{_trackController.State}");
                 _logger.LogInformation($"output: {_pannel.MaxOutput}");
