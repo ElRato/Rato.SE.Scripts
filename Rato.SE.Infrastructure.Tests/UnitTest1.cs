@@ -21,6 +21,9 @@ namespace IngameScript
         [Test]
         public void Test2()
         {
+            var logger = new TestLogger();
+            var bus = new Program.CommunicationBus(logger);
+            bus.Initialize();
         }
     }
 }
