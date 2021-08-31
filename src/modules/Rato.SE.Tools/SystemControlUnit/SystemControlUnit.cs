@@ -36,11 +36,11 @@ namespace IngameScript
                 _logger = logger;
             }
 
-            public void UseConfigStorage(LowLevelStore store)
+            public void UseConfigStorage(ILowLevelStore store)
             {
                 _configStoreHandler = new DataStoreHandler(store);
             }
-            public void UseDurableStorage(LowLevelStore store)
+            public void UseDurableStorage(ILowLevelStore store)
             {
                 _durableStoreHandler = new DataStoreHandler(store);
             }

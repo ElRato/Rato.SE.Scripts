@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\CommunicationBus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\EventProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\IControllModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\SequenceExecutor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommunicationBus\StateCheckItem.cs" />

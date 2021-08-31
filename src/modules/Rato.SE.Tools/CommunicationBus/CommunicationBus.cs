@@ -59,7 +59,7 @@ namespace IngameScript
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
-                    if (module.Status.IncludeToUpdateSequence && module is ISelfTestableModule)
+                    if (module is ISelfTestableModule && module.Status.IncludeToUpdateSequence)
                         updateFrequency |= (module as ISelfTestableModule).StartTestSquence();
                 }
 
@@ -86,7 +86,7 @@ namespace IngameScript
                 foreach (var module in _modules.Values)
                 {
                     if(module.Status.IncludeToUpdateSequence)
-                        updateFrequency |= module.ContinueSquence(updateHit);
+                        updateFrequency |= module.ContinueSequence(updateHit);
                 }
                 return updateFrequency;
             }
