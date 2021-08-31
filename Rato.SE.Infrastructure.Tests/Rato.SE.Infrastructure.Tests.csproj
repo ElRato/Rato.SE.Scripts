@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="MDK\MDK.options.props">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Include="MDK\whitelist.cache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContentWithTargetPath
+       Include="$(MDKGameBinPath)\*.dll"
+       CopyToOutputDirectory="PreserveNewest"
+       TargetPath="%(Filename)%(Extension)" />
+  </ItemGroup>
+ 
+  <Import Project="MDK\MDK.paths.props" Condition="exists('MDK\MDK.paths.props')" />
+  <Import Project="MDK\MDK.options.props" />
+  <Import Project="..\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
+
+</Project>

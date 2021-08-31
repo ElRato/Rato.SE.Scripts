@@ -31,8 +31,8 @@ namespace IngameScript
         }
         public class EchoLogger : ILogger
         {
-            private Program _program;
-            public EchoLogger(Program program) {
+            private MyGridProgram _program;
+            public EchoLogger(MyGridProgram program) {
                 _program = program;
             }
             public void LogInformation(string message)
@@ -53,9 +53,9 @@ namespace IngameScript
 
         public class LcdTextLogger : ILogger
         {
-            private Program _program;
+            private MyGridProgram _program;
             private IMyTextSurface _panel;
-            public LcdTextLogger(Program program, string header, IMyTextSurface panel)
+            public LcdTextLogger(MyGridProgram program, string header, IMyTextSurface panel)
             {
                 _program = program;
                 _panel = panel;
