@@ -1,4 +1,5 @@
 ﻿using Malware.MDKUtilities;
+using Sandbox.ModAPI.Ingame;
 
 namespace IngameScript.MDK
 {
@@ -12,6 +13,11 @@ namespace IngameScript.MDK
         {
             // Initialize the MDK utility framework
             MDKUtilityFramework.Load();
+        }
+
+        public static MyGridProgram PrepareFixture(MDKFactory.ProgramConfig config)
+        {
+            return MDKFactory.CreateProgram<Program>(config);
         }
 
         public static void Main()

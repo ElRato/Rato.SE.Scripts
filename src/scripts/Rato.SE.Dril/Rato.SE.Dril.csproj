@@ -49,18 +49,13 @@
     <AdditionalFiles Include="Instructions.readme" />
     <AdditionalFiles Include="thumb.png" />
     <AdditionalFiles Include="MDK\whitelist.cache" />
-    <Compile Include="SolarTrack\SolarTrackModule.cs" />
-    <Compile Include="SolarTrack\SolarTrackInitialize.cs" />
-    <Compile Include="SolarTrack\SolarTrackTracking.cs" />
-    <Compile Include="SolarTrack\SolarTrackSelfTest.cs" />
-    <Compile Include="SolarTrack\SolarTrackSettings.cs" />
-    <Compile Include="SolarTrack\SolarTrackState.cs" />
   </ItemGroup>
-  <Import Project="..\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
-  <Import Project="..\Rato.SE.HandModule\Rato.SE.HandModule.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="MDK\MDK.options.props" DestinationFolder="$(TargetDir)\MDK" />
     <Copy SourceFiles="MDK\MDK.paths.props" DestinationFolder="$(TargetDir)\MDK" />
   </Target>
+  <Import Project="..\..\modules\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
+  <Import Project="..\..\modules\Rato.SE.HandModule\Rato.SE.HandModule.projitems" Label="Shared" />
+  <Import Project="..\..\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems" Label="Shared" />
 </Project>
