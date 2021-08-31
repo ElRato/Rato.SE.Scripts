@@ -9,12 +9,15 @@
     <Import_RootNamespace>Rato.SE.HandModule</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)HandModule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HandModuleHoldElevation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HandModuleInitialize.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HandModuleSelfTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HandModuleUserControl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HandState.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HandSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandModuleHoldElevation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandModuleInitialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandModuleSelfTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandModuleUserControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hand\HandSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Hand\" />
   </ItemGroup>
 </Project>

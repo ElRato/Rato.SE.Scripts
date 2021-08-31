@@ -9,9 +9,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.Tools", "Rato.SE.To
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.HandModule", "Rato.SE.HandModule\Rato.SE.HandModule.shproj", "{30D9795E-A035-4F5E-83E1-1E211E7BCA0A}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.SolarTrackModule", "Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.shproj", "{6128259B-2702-4E71-B09A-A27B71296B9A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Rato.SE.HandModule\Rato.SE.HandModule.projitems*{30d9795e-a035-4f5e-83e1-1e211e7bca0a}*SharedItemsImports = 13
+		Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems*{6128259b-2702-4e71-b09a-a27b71296b9a}*SharedItemsImports = 13
 		Rato.SE.HandModule\Rato.SE.HandModule.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
 		Rato.SE.Tools\Rato.SE.Tools.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
 		Rato.SE.Tools\Rato.SE.Tools.projitems*{df5eab4f-4b18-43d5-8ca2-897322478619}*SharedItemsImports = 13
