@@ -17,6 +17,6 @@
   </ItemGroup>
  
   <Import Project="MDK\MDK.paths.props" Condition="exists('MDK\MDK.paths.props')" />
-  <Import Project="..\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
+  <Import Project="..\..\src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
 
 </Project>

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Dril", "Rato.SE.Dril\Rato.SE.Dril.csproj", "{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Dril", "src\scripts\Rato.SE.Dril\Rato.SE.Dril.csproj", "{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.Tools", "Rato.SE.Tools\Rato.SE.Tools.shproj", "{DF5EAB4F-4B18-43D5-8CA2-897322478619}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.Tools", "src\modules\Rato.SE.Tools\Rato.SE.Tools.shproj", "{DF5EAB4F-4B18-43D5-8CA2-897322478619}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.HandModule", "Rato.SE.HandModule\Rato.SE.HandModule.shproj", "{30D9795E-A035-4F5E-83E1-1E211E7BCA0A}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.HandModule", "src\modules\Rato.SE.HandModule\Rato.SE.HandModule.shproj", "{30D9795E-A035-4F5E-83E1-1E211E7BCA0A}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.SolarTrackModule", "Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.shproj", "{6128259B-2702-4E71-B09A-A27B71296B9A}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.SolarTrackModule", "src\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.shproj", "{6128259B-2702-4E71-B09A-A27B71296B9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Infrastructure.Tests", "Rato.SE.Infrastructure.Tests\Rato.SE.Infrastructure.Tests.csproj", "{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Infrastructure.Tests", "tests\Rato.SE.Infrastructure.Tests\Rato.SE.Infrastructure.Tests.csproj", "{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{936F58B0-3978-4E01-9675-6073B94A9C16}"
 EndProject
