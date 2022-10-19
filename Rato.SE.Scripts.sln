@@ -11,7 +11,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.HandModule", "src\m
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.SolarTrackModule", "src\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.shproj", "{6128259B-2702-4E71-B09A-A27B71296B9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.Infrastructure.Tests", "tests\Rato.SE.Infrastructure.Tests\Rato.SE.Infrastructure.Tests.csproj", "{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rato.SE.Infrastructure.Tests", "tests\Rato.SE.Infrastructure.Tests\Rato.SE.Infrastructure.Tests.csproj", "{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{936F58B0-3978-4E01-9675-6073B94A9C16}"
 EndProject
@@ -21,51 +21,77 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{1D75
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{9EB647A4-28C8-4E55-BCC6-1775FE555913}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.StationRover", "src\scripts\Rato.SE.StationRover\Rato.SE.StationRover.csproj", "{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.ExpandableHand", "src\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.shproj", "{E4984316-A62C-42DB-8208-8DBB3301C32C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Rato.SE.HandModule\Rato.SE.HandModule.projitems*{30d9795e-a035-4f5e-83e1-1e211e7bca0a}*SharedItemsImports = 13
-		Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems*{6128259b-2702-4e71-b09a-a27b71296b9a}*SharedItemsImports = 13
-		Rato.SE.Tools\Rato.SE.Tools.projitems*{68a9edb7-2376-41f3-80b7-256cb46c2c7c}*SharedItemsImports = 5
-		Rato.SE.HandModule\Rato.SE.HandModule.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
-		Rato.SE.Tools\Rato.SE.Tools.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
-		Rato.SE.Tools\Rato.SE.Tools.projitems*{df5eab4f-4b18-43d5-8ca2-897322478619}*SharedItemsImports = 13
+		src\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems*{202caf8e-ec10-4fac-9dd6-3af775b71262}*SharedItemsImports = 4
+		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{202caf8e-ec10-4fac-9dd6-3af775b71262}*SharedItemsImports = 4
+		src\modules\Rato.SE.HandModule\Rato.SE.HandModule.projitems*{30d9795e-a035-4f5e-83e1-1e211e7bca0a}*SharedItemsImports = 13
+		src\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems*{6128259b-2702-4e71-b09a-a27b71296b9a}*SharedItemsImports = 13
+		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{68a9edb7-2376-41f3-80b7-256cb46c2c7c}*SharedItemsImports = 5
+		src\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
+		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{d335ce30-bab6-42f2-b333-4f6f39d0bbf0}*SharedItemsImports = 4
+		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{df5eab4f-4b18-43d5-8ca2-897322478619}*SharedItemsImports = 13
+		src\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.projitems*{e4984316-a62c-42db-8208-8dbb3301c32c}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|Any CPU.Build.0 = Debug|x64
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|x64.ActiveCfg = Debug|x64
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|x64.Build.0 = Debug|x64
+		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Debug|x86.ActiveCfg = Debug|x64
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Release|Any CPU.ActiveCfg = Debug|x64
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Release|Any CPU.Build.0 = Debug|x64
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Release|x64.ActiveCfg = Debug|x64
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Release|x64.Build.0 = Debug|x64
+		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0}.Release|x86.ActiveCfg = Debug|x64
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Debug|x64.Build.0 = Debug|Any CPU
+		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Release|x64.ActiveCfg = Release|Any CPU
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Release|x64.Build.0 = Release|Any CPU
+		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C}.Release|x86.ActiveCfg = Release|Any CPU
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Debug|Any CPU.Build.0 = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Debug|x64.ActiveCfg = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Debug|x64.Build.0 = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Debug|x86.ActiveCfg = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Release|Any CPU.ActiveCfg = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Release|Any CPU.Build.0 = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Release|x64.ActiveCfg = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Release|x64.Build.0 = Debug|x64
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262}.Release|x86.ActiveCfg = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5824C730-2357-410A-AF15-D870BBEF0362}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1D75214C-FA23-4EB2-97B1-09F81E51F946} = {936F58B0-3978-4E01-9675-6073B94A9C16}
-		{9EB647A4-28C8-4E55-BCC6-1775FE555913} = {936F58B0-3978-4E01-9675-6073B94A9C16}
 		{D335CE30-BAB6-42F2-B333-4F6F39D0BBF0} = {1D75214C-FA23-4EB2-97B1-09F81E51F946}
+		{DF5EAB4F-4B18-43D5-8CA2-897322478619} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
 		{30D9795E-A035-4F5E-83E1-1E211E7BCA0A} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
 		{6128259B-2702-4E71-B09A-A27B71296B9A} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
-		{DF5EAB4F-4B18-43D5-8CA2-897322478619} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
 		{68A9EDB7-2376-41F3-80B7-256CB46C2C7C} = {BD39D0C5-8DD2-449A-92E2-E7856D29E994}
+		{1D75214C-FA23-4EB2-97B1-09F81E51F946} = {936F58B0-3978-4E01-9675-6073B94A9C16}
+		{9EB647A4-28C8-4E55-BCC6-1775FE555913} = {936F58B0-3978-4E01-9675-6073B94A9C16}
+		{202CAF8E-EC10-4FAC-9DD6-3AF775B71262} = {1D75214C-FA23-4EB2-97B1-09F81E51F946}
+		{E4984316-A62C-42DB-8208-8DBB3301C32C} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5824C730-2357-410A-AF15-D870BBEF0362}
 	EndGlobalSection
 EndGlobal

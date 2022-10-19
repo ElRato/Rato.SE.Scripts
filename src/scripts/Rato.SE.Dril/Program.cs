@@ -18,6 +18,7 @@ using VRage;
 using VRageMath;
 using Sandbox.ModAPI;
 
+
 namespace IngameScript
 {
     partial class Program : MyGridProgram
@@ -27,19 +28,16 @@ namespace IngameScript
         private SystemControlUnit _scu;
         private CommunicationBus _bus;
 
-
         public Program()
         {
             _logger = new EchoLogger(this);
             var lcd = Me.GetSurface(0);
             _stateLcd = new LcdTextLogger(this, "System", lcd);
 
-            //var handModule = new HandModule(this, _logger);
-            var solarModule = new SolarTrackModule(this, _logger);
+            var handModule = new ExpandableHandModule(this, _logger);
 
             _bus = new CommunicationBus(_logger);
-            //_bus.AddModule("MainHand", handModule);
-            _bus.AddModule("SolarTrack", solarModule);
+            _bus.AddModule("MainHand", handModule);
 
             _scu = new SystemControlUnit(_logger);
             _scu.UseCommunicationBus(_bus);
@@ -57,9 +55,12 @@ namespace IngameScript
         {
             try
             {
+                Echo("Update Time: " + Runtime.LastRunTimeMs.ToString("F"));
                 _scu.RunIteration(updateSource, argument);
                 //[TODO] Include cleanup into logger function
                 Me.GetSurface(0).WriteText($"", false);
+
+                _stateLcd.LogInformation($"Update Time: {Runtime.LastRunTimeMs.ToString("F")}");
                 _bus.LogModuleState(_stateLcd);
             }
             catch (Exception e) {

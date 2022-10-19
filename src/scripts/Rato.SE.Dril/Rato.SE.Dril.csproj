@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>IngameScript</RootNamespace>
     <AssemblyName>Rato.SE.Dril</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -24,6 +24,9 @@
     <Prefer32Bit>true</Prefer32Bit>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="netstandard" />
     <Reference Include="System" />
@@ -38,17 +41,23 @@
   <Import Project="MDK/MDK.options.props" />
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
-    <Compile Include="MDK\Bootstrapper.cs" />
-    <AdditionalFiles Include="MDK\MDK.options.props">
+    <Compile Include="mdk\Bootstrapper.cs" />
+    <AdditionalFiles Include="mdk\MDK.options.props">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
-    <AdditionalFiles Include="MDK\MDK.paths.props">
+    <AdditionalFiles Include="mdk\MDK.paths.props">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
     <Compile Include="Program.cs" />
     <AdditionalFiles Include="Instructions.readme" />
     <AdditionalFiles Include="thumb.png" />
-    <AdditionalFiles Include="MDK\whitelist.cache" />
+    <AdditionalFiles Include="mdk\whitelist.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
@@ -56,6 +65,5 @@
     <Copy SourceFiles="MDK\MDK.paths.props" DestinationFolder="$(TargetDir)\MDK" />
   </Target>
   <Import Project="..\..\modules\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
-  <Import Project="..\..\modules\Rato.SE.HandModule\Rato.SE.HandModule.projitems" Label="Shared" />
-  <Import Project="..\..\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems" Label="Shared" />
+  <Import Project="..\..\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.projitems" Label="Shared" />
 </Project>

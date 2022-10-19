@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>e4984316-a62c-42db-8208-8dbb3301c32c</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Rato.SE.ExpandableHand</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ExpandableHand\ExpandableHandModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpandableHand\ExpandableHandModuleInitialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpandableHand\ExpandableHandModuleSelfTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpandableHand\ExpandableHandModuleUserControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpandableHand\ExpandableHandSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpandableHand\ExpandableHandState.cs" />
+  </ItemGroup>
+</Project>
