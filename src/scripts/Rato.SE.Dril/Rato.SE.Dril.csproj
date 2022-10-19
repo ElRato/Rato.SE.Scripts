@@ -41,6 +41,12 @@
   <Import Project="MDK/MDK.options.props" />
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
+    <Compile Include="CargoControl\CargoControlModule.cs" />
+    <Compile Include="CargoControl\CargoControlModuleGenericSequence.cs" />
+    <Compile Include="CargoControl\CargoControlModuleInitialize.cs" />
+    <Compile Include="CargoControl\CargoControlSettings.cs" />
+    <Compile Include="CargoControl\CargoControlState.cs" />
+    <Compile Include="mdk\TestBootstrapper.cs" />
     <Compile Include="mdk\Bootstrapper.cs" />
     <AdditionalFiles Include="mdk\MDK.options.props">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -55,6 +61,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\external\SETestEnv\SETestEnv.csproj">
+      <Project>{e60aec9d-abce-432b-a199-90b1188ea9bc}</Project>
+      <Name>SETestEnv</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\SETestSurface\SETestSurface\SETestSurface.csproj">
+      <Project>{4e473dc9-22dd-4aca-b7b6-071bdaed7b9c}</Project>
+      <Name>SETestSurface</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

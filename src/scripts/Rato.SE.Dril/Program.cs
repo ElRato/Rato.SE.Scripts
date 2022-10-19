@@ -35,9 +35,11 @@ namespace IngameScript
             _stateLcd = new LcdTextLogger(this, "System", lcd);
 
             var handModule = new ExpandableHandModule(this, _logger);
+            var ccModule = new CargoControlModule(this, _logger);
 
             _bus = new CommunicationBus(_logger);
             _bus.AddModule("MainHand", handModule);
+            _bus.AddModule("CargoControl", ccModule);
 
             _scu = new SystemControlUnit(_logger);
             _scu.UseCommunicationBus(_bus);

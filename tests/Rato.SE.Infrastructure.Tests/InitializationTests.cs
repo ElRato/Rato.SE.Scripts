@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using IngameScript;
-using Malware.MDKUtilities;
 using Moq;
 using NUnit.Framework;
 using Sandbox.ModAPI.Ingame;

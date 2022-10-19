@@ -1,0 +1,6 @@
+[submodule "src/external/SETestEnv"]
+	path = src/external/SETestEnv
+	url = git@github.com:krypt-lynx/SETestEnv.git
+[submodule "src/external/SETestSurface"]
+	path = src/external/SETestSurface
+	url = git@github.com:krypt-lynx/SETestSurface.git
