@@ -25,15 +25,15 @@ namespace IngameScript
         {
             private ILogger _logger;
             
-            private Dictionary<string, IControllModule> _modules;
+            private Dictionary<string, IModule> _modules;
 
             public CommunicationBus(ILogger logger)
             {
                 _logger = logger;
-                _modules = new Dictionary<string, IControllModule>();
+                _modules = new Dictionary<string, IModule>();
             }
 
-            public void AddModule(string key, IControllModule module)
+            public void AddModule(string key, IModule module)
             {
                 if (_modules.ContainsKey(key))
                 {
@@ -85,8 +85,8 @@ namespace IngameScript
                 var updateFrequency = UpdateFrequency.None;
                 foreach (var module in _modules.Values)
                 {
-                    if(module.Status.IncludeToUpdateSequence)
-                        updateFrequency |= module.ContinueSequence(updateHit);
+                    if(module.Status.IncludeToUpdateSequence && module is IControllModule)
+                        updateFrequency |= (module as IControllModule).ContinueSequence(updateHit);
                 }
                 return updateFrequency;
             }

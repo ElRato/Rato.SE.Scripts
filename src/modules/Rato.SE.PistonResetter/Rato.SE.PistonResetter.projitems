@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>32ce6d99-915d-42e0-a8e1-c92994743089</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Rato.SE.PistonResetter</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)PistonResetter\PistonResetterInitialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PistonResetter\PistonResetterModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PistonResetter\PistonResetterSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PistonResetter\PistonResetterState.cs" />
+  </ItemGroup>
+</Project>

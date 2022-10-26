@@ -60,8 +60,7 @@ namespace IngameScript
                 _bus.SetConfig(_configStoreHandler);
                 _bus.Initialize();
                 _bus.SaveConfig(_configStoreHandler);
-                if (_configStoreHandler.IsEmpty())
-                    _configStoreHandler.Save();
+                _configStoreHandler.Save();
                 updateFrequency |= _bus.StartSelfTest();
                 updateFrequency |= _bus.Autostart();
 
@@ -111,6 +110,8 @@ namespace IngameScript
                     if (_bus.SetConfig(_configStoreHandler))
                     {
                         _bus.Initialize();
+                        _bus.SaveConfig(_configStoreHandler);
+                        _configStoreHandler.Save();
                         updateFrequency |= _bus.StartSelfTest();
                         updateFrequency |= _bus.Autostart();
                     }

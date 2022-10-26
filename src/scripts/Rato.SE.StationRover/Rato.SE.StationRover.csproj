@@ -53,6 +53,7 @@
   <Import Project="..\..\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems" Label="Shared" />
   <Import Project="..\..\modules\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />
   <Import Project="..\..\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.projitems" Label="Shared" />
+  <Import Project="..\..\modules\Rato.SE.PistonResetter\Rato.SE.PistonResetter.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="MDK\MDK.options.props" DestinationFolder="$(TargetDir)\MDK" />

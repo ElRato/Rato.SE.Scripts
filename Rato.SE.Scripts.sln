@@ -33,12 +33,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rato.SE.TestRuntime", "src\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.ExpandableHand", "src\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.shproj", "{E4984316-A62C-42DB-8208-8DBB3301C32C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Rato.SE.PistonResetter", "src\modules\Rato.SE.PistonResetter\Rato.SE.PistonResetter.shproj", "{32CE6D99-915D-42E0-A8E1-C92994743089}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\modules\Rato.SE.ExpandableHand\Rato.SE.ExpandableHand.projitems*{202caf8e-ec10-4fac-9dd6-3af775b71262}*SharedItemsImports = 4
+		src\modules\Rato.SE.PistonResetter\Rato.SE.PistonResetter.projitems*{202caf8e-ec10-4fac-9dd6-3af775b71262}*SharedItemsImports = 4
 		src\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems*{202caf8e-ec10-4fac-9dd6-3af775b71262}*SharedItemsImports = 4
 		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{202caf8e-ec10-4fac-9dd6-3af775b71262}*SharedItemsImports = 4
 		src\modules\Rato.SE.HandModule\Rato.SE.HandModule.projitems*{30d9795e-a035-4f5e-83e1-1e211e7bca0a}*SharedItemsImports = 13
+		src\modules\Rato.SE.PistonResetter\Rato.SE.PistonResetter.projitems*{32ce6d99-915d-42e0-a8e1-c92994743089}*SharedItemsImports = 13
 		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{5a930f88-7d63-4a75-b93a-e6999987b8a3}*SharedItemsImports = 4
 		src\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems*{6128259b-2702-4e71-b09a-a27b71296b9a}*SharedItemsImports = 13
 		src\modules\Rato.SE.Tools\Rato.SE.Tools.projitems*{68a9edb7-2376-41f3-80b7-256cb46c2c7c}*SharedItemsImports = 5
@@ -138,6 +142,7 @@ Global
 		{4E473DC9-22DD-4ACA-B7B6-071BDAED7B9C} = {6A492F14-FE30-40FB-9236-07177C8AB94A}
 		{5A930F88-7D63-4A75-B93A-E6999987B8A3} = {1D75214C-FA23-4EB2-97B1-09F81E51F946}
 		{E4984316-A62C-42DB-8208-8DBB3301C32C} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
+		{32CE6D99-915D-42E0-A8E1-C92994743089} = {9EB647A4-28C8-4E55-BCC6-1775FE555913}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5824C730-2357-410A-AF15-D870BBEF0362}

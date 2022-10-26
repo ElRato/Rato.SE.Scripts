@@ -36,10 +36,12 @@ namespace IngameScript
 
             var solarModule = new SolarTrackModule(this, _logger);
             var handModule = new ExpandableHandModule(this, _logger);
+            var pistonResetter = new PistonResetterModule(this, _logger);
 
             _bus = new CommunicationBus(_logger);
             _bus.AddModule("SolarTrack", solarModule);
             _bus.AddModule("MainHand", handModule);
+            _bus.AddModule("PistonResetter", pistonResetter);
 
             _scu = new SystemControlUnit(_logger);
             _scu.UseCommunicationBus(_bus);

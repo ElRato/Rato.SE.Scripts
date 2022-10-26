@@ -43,12 +43,15 @@ namespace IngameScript
             void SaveState(DataStoreHandler storeHandler);
         }
 
-        public interface IControllModule
+        public interface IModule
         {
             void Initialize();
             ModuleStatus Status { get; set; }
             List<ModuleStatusDetail> StatusDetails { get; }
+        }
 
+        public interface IControllModule: IModule
+        {
             UpdateFrequency ContinueSequence(UpdateType updateSource);
         }
 
