@@ -21,43 +21,46 @@ namespace IngameScript
 {
     partial class Program
     {
-        public partial class ExpandableHandModule : IControllModule, ISelfTestableModule, IAutoStartModule, ITerminalModule, IConfigurableModule
+        public partial class FineRefineModule : IControllModule, IAutoStartModule, ITerminalModule, IConfigurableModule
         {
-            private ExpandableHandSettings _settings;
-            private ExpandableHandState _state;
+            private FineRefineSettings _settings;
+            private FineRefineState _state;
             private MyGridProgram _program;
             private ILogger _logger;
 
-            private List<IMyMotorStator> _tempsRotorList;
-            private List<IMyShipController> _shipControllerList;
+            private List<IMyRefinery> _refinaries;
+            private Dictionary<IMyRefinery, FineRefinaryConfig> _refinaryConfigs;
+            public Dictionary<IMyRefinery, CargoQueue2> _queues;
 
-            private IMyMotorStator _horizontalRotor;
-            private IMyMotorStator _extendRotorFirst;
-            private IMyMotorStator _extendRotorSecond;
-            private IMyMotorStator _toolHorizontalRotor;
-            private IMyMotorStator _toolVerticalRotor;
+            public SequenceExecutor _refineQueueSequence;
 
-            public SequenceExecutor _handController;
+            public List<MyInventoryItem> _currentItems;
+            public List<MyInventoryItem> _containerItems;
+            private List<IMyTerminalBlock> _containers;
 
             public List<ModuleStatusDetail> StatusDetails { get; private set; }
 
             public ModuleStatus Status { get; set; }
 
-            public ExpandableHandModule(MyGridProgram program, ILogger logger)
+            public FineRefineModule(MyGridProgram program, ILogger logger)
             {
                 _program = program;
                 _logger = logger;
 
-                _handController = new SequenceExecutor(_logger);
-
-                _tempsRotorList = new List<IMyMotorStator>();
-                _shipControllerList = new List<IMyShipController>();
+                _refineQueueSequence = new SequenceExecutor(_logger);
 
                 StatusDetails = new List<ModuleStatusDetail>();
                 Status = ModuleStatus.JustCreated;
 
-                _settings = new ExpandableHandSettings();
-                _state = new ExpandableHandState();
+                _refinaries = new List<IMyRefinery>();
+                _refinaryConfigs = new Dictionary<IMyRefinery, FineRefinaryConfig>();
+                _currentItems = new List<MyInventoryItem>();
+                _containerItems = new List<MyInventoryItem>();
+                _containers = new List<IMyTerminalBlock>();
+                _queues = new Dictionary<IMyRefinery, CargoQueue2>();
+
+                _settings = new FineRefineSettings();
+                _state = new FineRefineState();
             }
 
             public bool SetConfig(DataStoreHandler storeHandler)
@@ -86,46 +89,26 @@ namespace IngameScript
 
             public UpdateFrequency ContinueSequence(UpdateType updateSource)
             {
-                _logger.LogInformation($"Hand position controller state:{_handController.State}");
-                return _handController.ContinueSequence(updateSource);
+                _logger.LogInformation($"Fine refinary state:{_refineQueueSequence.State}");
+                return _refineQueueSequence.ContinueSequence(updateSource);
             }
 
             public UpdateFrequency AutoStart()
             {
                 Status = ModuleStatus.Active;
-                return UserControl();
+                return DistrubuteResources();
             }
 
             public UpdateFrequency TerminalAction(UpdateType updateSource, string Argument)
             {
-                _logger.LogInformation("Hand awaked");
+                _logger.LogInformation("Fine refinary online");
                 var updateFrequency = UpdateFrequency.None;
 
-                if (Argument.StartsWith("ExpHand") && (updateSource | UpdateType.Terminal | UpdateType.Trigger) > 0)
+                if (Argument.StartsWith("Fine") && (updateSource | UpdateType.Terminal | UpdateType.Trigger) > 0)
                 {
-                    if (Argument == "ExpHand.Stop")
-                    {
-                        updateFrequency = _handController.StopSequence();
-                        StopHand();
-                    }
-                    if (Argument == "ExpHand.UserControl")
-                    {
-                        updateFrequency = UserControl();
-                    }
                 }
 
                 return updateFrequency;
-            }
-
-            private void StopHand()
-            {
-                _horizontalRotor.TargetVelocityRad = 0;
-                _extendRotorFirst.TargetVelocityRad = 0;
-                _extendRotorSecond.TargetVelocityRad = 0;
-                if (_toolHorizontalRotor != null)
-                    _toolHorizontalRotor.TargetVelocityRad = 0;
-                if (_toolVerticalRotor != null)
-                    _toolVerticalRotor.TargetVelocityRad = 0;
             }
         }
     }

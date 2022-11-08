@@ -49,6 +49,12 @@
     <AdditionalFiles Include="Instructions.readme" />
     <AdditionalFiles Include="thumb.png" />
     <AdditionalFiles Include="MDK\whitelist.cache" />
+    <Compile Include="Rato.SE.FineRefine\CargoQueue2.cs" />
+    <Compile Include="Rato.SE.FineRefine\FineRefineModule.cs" />
+    <Compile Include="Rato.SE.FineRefine\FineRefineModuleDistribute.cs" />
+    <Compile Include="Rato.SE.FineRefine\FineRefineModuleInitialize.cs" />
+    <Compile Include="Rato.SE.FineRefine\FineRefineSettings.cs" />
+    <Compile Include="Rato.SE.FineRefine\FineRefineHandState.cs" />
   </ItemGroup>
   <Import Project="..\..\modules\Rato.SE.SolarTrackModule\Rato.SE.SolarTrackModule.projitems" Label="Shared" />
   <Import Project="..\..\modules\Rato.SE.Tools\Rato.SE.Tools.projitems" Label="Shared" />

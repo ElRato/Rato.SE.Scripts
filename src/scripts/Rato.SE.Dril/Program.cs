@@ -30,9 +30,9 @@ namespace IngameScript
 
         public Program()
         {
-            _logger = new EchoLogger(this);
+            _logger = new EchoLogger(this, LogLevel.Warning);
             var lcd = Me.GetSurface(0);
-            _stateLcd = new LcdTextLogger(this, "System", lcd);
+            _stateLcd = new LcdTextLogger(this, "System", lcd, LogLevel.Information);
 
             var handModule = new ExpandableHandModule(this, _logger);
             var ccModule = new CargoControlModule(this, _logger);

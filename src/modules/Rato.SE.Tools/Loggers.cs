@@ -22,7 +22,18 @@ namespace IngameScript
 {
     partial class Program
     {
+        public enum LogLevel
+        {
+            Debug,
+            Information,
+            Warning,
+            Error
+        }
+
+
         public interface ILogger {
+            void LogDebug(String message);
+
             void LogInformation(String message);
 
             void LogWarning(String message);
@@ -32,22 +43,33 @@ namespace IngameScript
         public class EchoLogger : ILogger
         {
             private Program _program;
-            public EchoLogger(Program program) {
+            private LogLevel _loglevel;
+            public EchoLogger(Program program, LogLevel logLevel) {
                 _program = program;
+                _loglevel = logLevel;
+            }
+
+            public void LogDebug(string message)
+            {
+                if (_loglevel <= LogLevel.Debug)
+                    _program.Echo($"[DBG]{message}");
             }
             public void LogInformation(string message)
             {
-                _program.Echo($"[INF]{message}");
+                if(_loglevel <= LogLevel.Information)
+                    _program.Echo($"[INF]{message}");
             }
 
             public void LogWarning(string message)
             {
-                _program.Echo($"[WRN]{message}");
+                if (_loglevel <= LogLevel.Warning)
+                    _program.Echo($"[WRN]{message}");
             }
 
             public void LogError(string message)
             {
-                _program.Echo($"[ERR]{message}");
+                if (_loglevel <= LogLevel.Error)
+                    _program.Echo($"[ERR]{message}");
             }
         }
 
@@ -55,26 +77,38 @@ namespace IngameScript
         {
             private Program _program;
             private IMyTextSurface _panel;
-            public LcdTextLogger(Program program, string header, IMyTextSurface panel)
+            private LogLevel _loglevel;
+            public LcdTextLogger(Program program, string header, IMyTextSurface panel, LogLevel logLevel)
             {
                 _program = program;
                 _panel = panel;
                 _panel.WriteText($"{header}\n");
                 _panel.ContentType = ContentType.TEXT_AND_IMAGE;
+                _loglevel = logLevel;
             }
+
+            public void LogDebug(string message)
+            {
+                if (_loglevel <= LogLevel.Debug)
+                    _panel.WriteText($"{message}\n", true);
+            }
+
             public void LogInformation(string message)
             {
-                _panel.WriteText($"{message}\n", true);
+                if (_loglevel <= LogLevel.Information)
+                    _panel.WriteText($"{message}\n", true);
             }
 
             public void LogWarning(string message)
             {
-                _panel.WriteText($"{message}\n", true);
+                if (_loglevel <= LogLevel.Warning)
+                    _panel.WriteText($"{message}\n", true);
             }
 
             public void LogError(string message)
             {
-                _panel.WriteText($"{message}\n", true);
+                if (_loglevel <= LogLevel.Error)
+                    _panel.WriteText($"{message}\n", true);
             }
         }
     }

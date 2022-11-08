@@ -11,7 +11,7 @@ namespace IngameScript
         
         public Program()
         {
-            _logger = new Program.EchoLogger(this);
+            _logger = new Program.EchoLogger(this, LogLevel.Debug);
 
             _bus = new Program.CommunicationBus(_logger);
 

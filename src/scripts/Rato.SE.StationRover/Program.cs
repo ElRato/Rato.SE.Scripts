@@ -30,15 +30,17 @@ namespace IngameScript
 
         public Program()
         {
-            _logger = new EchoLogger(this);
+            _logger = new EchoLogger(this, LogLevel.Debug);
             var lcd = Me.GetSurface(0);
-            _stateLcd = new LcdTextLogger(this, "System", lcd);
+            _stateLcd = new LcdTextLogger(this, "System", lcd , LogLevel.Information);
 
             var solarModule = new SolarTrackModule(this, _logger);
             var handModule = new ExpandableHandModule(this, _logger);
             var pistonResetter = new PistonResetterModule(this, _logger);
+            var refinary = new FineRefineModule(this, _logger);
 
             _bus = new CommunicationBus(_logger);
+            _bus.AddModule("Refinary", refinary);
             _bus.AddModule("SolarTrack", solarModule);
             _bus.AddModule("MainHand", handModule);
             _bus.AddModule("PistonResetter", pistonResetter);
@@ -60,9 +62,11 @@ namespace IngameScript
         {
             try
             {
+                Echo("Update Time: " + Runtime.LastRunTimeMs.ToString("F"));
                 _scu.RunIteration(updateSource, argument);
                 //[TODO] Include cleanup into logger function
                 Me.GetSurface(0).WriteText($"", false);
+                _stateLcd.LogInformation($"Update Time: {Runtime.LastRunTimeMs.ToString("F")}");
                 _bus.LogModuleState(_stateLcd);
             }
             catch (Exception e)

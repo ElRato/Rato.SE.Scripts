@@ -93,8 +93,17 @@ namespace IngameScript
             {
                 var updateHit = currentHit | UpdateType.Terminal | UpdateType.Trigger;
                 var updateFrequency = UpdateFrequency.None;
-                
-                if (argument == "Action.SettingsTemplate")
+
+                if (argument == "Debug")
+                {
+                    try {
+                        throw new NullReferenceException();
+                    }
+                    catch{
+                        _logger.LogInformation("Welcome to debug");
+                    }
+                }
+                else if (argument == "Action.SettingsTemplate")
                 {
                     _logger.LogInformation("Write current settings");
                     _bus.SaveConfig(_configStoreHandler);
