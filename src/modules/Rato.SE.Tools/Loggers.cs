@@ -37,17 +37,17 @@ namespace IngameScript
             }
             public void LogInformation(string message)
             {
-                _program.Echo($"[INF]{message}");
+                _program.Echo($"[INF] {message}");
             }
 
             public void LogWarning(string message)
             {
-                _program.Echo($"[WRN]{message}");
+                _program.Echo($"[WRN] {message}");
             }
 
             public void LogError(string message)
             {
-                _program.Echo($"[ERR]{message}");
+                _program.Echo($"[ERR] {message}");
             }
         }
 

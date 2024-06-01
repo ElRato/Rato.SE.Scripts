@@ -38,6 +38,14 @@
   <Import Project="MDK/MDK.options.props" />
   <Import Project="MDK/MDK.paths.props" Condition="exists('MDK/MDK.paths.props')" />
   <ItemGroup>
+    <Compile Include="RepetableBuild\RepetableBuildModule.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildModuleReset.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildModuleRetract.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildModuleInitialize.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildModuleSelfTest.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildModuleExtend.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildSettings.cs" />
+    <Compile Include="RepetableBuild\RepetableBuildState.cs" />
     <Compile Include="MDK\Bootstrapper.cs" />
     <AdditionalFiles Include="MDK\MDK.options.props">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
