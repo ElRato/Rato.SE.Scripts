@@ -30,63 +30,44 @@ namespace IngameScript
                 return _buildController.StartSequence(ExtendSequence());
             }
 
-            private float _defaultVelocity = 0.1F;
+            private float _defaultVelocity = 0.2F;
             private IEnumerator<int> ExtendSequence()
             {
-                foreach (var welder in _welders)
-                    welder.ApplyAction("OnOff_On");
-
-                _mergeBlock.ApplyAction("OnOff_On");
-                _projector.ApplyAction("OnOff_On");
+                _blockUtils.TryTurnOn(_welders);
+                _blockUtils.TryTurnOff(_grinders);
+                _blockUtils.TryTurnOn(_mergeBlock);
+                _blockUtils.TryTurnOn(_projector);
                 
                 if (!_connector.IsConnected)
                 {
-                    if (_magnet.IsLocked)
-                    {
-                        SetPistonToExtend(_defaultVelocity * 10);
-                        while (_piston.Status != PistonStatus.Extended || _mergeBlock.State != MergeState.Locked) 
-                            yield return 100;
-                        if (_mergeBlock.State == MergeState.Locked)
-                            _connector.Connect();
-
-                        if (!_connector.IsConnected)
-                        {
-                            SetPistonToRetract(_defaultVelocity * 10);
-                            while (_piston.Status != PistonStatus.Retracted || _mergeBlock.State != MergeState.Locked)
-                                yield return 100;
-                            if (_mergeBlock.State == MergeState.Locked)
-                                _connector.Connect();
-                        }
-                    }
-                    else
-                    {
-                        StopBuilder();
-                    }
-                    if (!_connector.IsConnected)
-                        StopBuilder();
+                    StopBuilder();
                 }
 
                 while (true)
                 {
                     if (_connector.IsConnected)
                     {
-                        SetPistonToExtend(_defaultVelocity);
+                        _magnet.Unlock();
+
+                        _piston.Velocity = _defaultVelocity;
                         while (_piston.Status != PistonStatus.Extended)
                             yield return 100;
+
                         if (_mergeBlock.State != MergeState.Locked)
                             StopBuilder();
 
-                        yield return 100;
                         _magnet.Lock();
+
+                        yield return 100;
 
                         if (!_magnet.IsLocked)
                             StopBuilder();
 
                         _connector.Disconnect();
-                        _mergeBlock.ApplyAction("OnOff_Off");
+                        _blockUtils.TryTurnOff(_mergeBlock);
 
                         yield return 100;
-                        SetPistonToRetract(_defaultVelocity * 10);
+                        _piston.Velocity = -_defaultVelocity * 5;
                         while (_piston.Status != PistonStatus.Retracted) yield return 100;
                         _piston.Velocity = 0;
 
@@ -94,24 +75,15 @@ namespace IngameScript
                             StopBuilder();
 
                         yield return 100;
-                        _mergeBlock.ApplyAction("OnOff_On");
-                        yield return 10;
+                        _blockUtils.TryTurnOn(_mergeBlock);
+                        yield return 100;
                         _connector.Connect();
                     }
+                    else
+                    {
+                        StopBuilder();
+                    }
                 }
-            }
-
-            private void SetPistonToExtend(float velocity)
-            {
-                _piston.ApplyAction("OnOff_On");
-                _piston.Velocity = velocity;
-                _piston.Extend();
-            }
-            private void SetPistonToRetract(float velocity)
-            {
-                _piston.ApplyAction("OnOff_On");
-                _piston.Velocity = velocity;
-                _piston.Retract();
             }
         }
     }

@@ -30,25 +30,26 @@ namespace IngameScript
             {
                 return TryAction(block, OnOff_On);
             }
-            
+
             public bool TryTurnOff(IMyTerminalBlock block)
             {
                 return TryAction(block, OnOff_Off);
             }
 
-            public bool TryTurnOn(List<IMyTerminalBlock> blocks)
+            public bool TryTurnOn<T>(List<T> blocks) where T : class, IMyTerminalBlock
             {
                 return TryAction(blocks, OnOff_On);
             }
 
-            public bool TryTurnOff<T>(List<T> blocks) where T:class, IMyTerminalBlock
+            public bool TryTurnOff<T>(List<T> blocks) where T : class, IMyTerminalBlock
             {
                 return TryAction(blocks, OnOff_Off);
             }
 
             public bool TryAction<T>(List<T> blocks, string action) where T : class, IMyTerminalBlock
             {
-                if (blocks.All(b => b.HasAction(action))) {
+                if (blocks.All(b => b.HasAction(action)))
+                {
                     foreach (var b in blocks)
                         b.ApplyAction(action);
                     return true;

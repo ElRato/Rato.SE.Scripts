@@ -24,6 +24,66 @@ namespace IngameScript
     {
         public partial class RepetableBuildModule : IControllModule
         {
+            public UpdateFrequency Retract()
+            {
+                _state.Operation = RepetableBuildState.BuildOperation.Retract;
+                return _buildController.StartSequence(RetractSequence());
+            }
+
+            private IEnumerator<int> RetractSequence()
+            {
+                _blockUtils.TryTurnOn(_grinders);
+                _blockUtils.TryTurnOff(_welders);
+                _blockUtils.TryTurnOn(_mergeBlock);
+                _blockUtils.TryTurnOn(_projector);
+
+                if (!_connector.IsConnected)
+                {
+                    StopBuilder();
+                }
+
+                while (true)
+                {
+                    if (_connector.IsConnected)
+                    {
+                        _magnet.Unlock();
+
+                        _piston.Velocity = -_defaultVelocity;
+                        while (_piston.Status != PistonStatus.Retracted)
+                            yield return 100;
+
+                        if (_mergeBlock.State != MergeState.Locked)
+                            StopBuilder();
+
+                        _magnet.Lock();
+
+                        yield return 100;
+
+                        if (!_magnet.IsLocked)
+                            StopBuilder();
+
+                        _connector.Disconnect();
+                        _blockUtils.TryTurnOff(_mergeBlock);
+
+                        yield return 100;
+                        _piston.Velocity = _defaultVelocity * 5;
+                        while (_piston.Status != PistonStatus.Extended) yield return 100;
+                        _piston.Velocity = 0;
+
+                        if (_connector.IsFunctional && _connector.Status != MyShipConnectorStatus.Connectable)
+                            StopBuilder();
+
+                        yield return 100;
+                        _blockUtils.TryTurnOn(_mergeBlock);
+                        yield return 100;
+                        _connector.Connect();
+                    }
+                    else
+                    {
+                        StopBuilder();
+                    }
+                }
+            }
         }
     }
 }

@@ -106,6 +106,7 @@ namespace IngameScript
                     switch (_nextOperation) 
                     {
                         case RepetableBuildState.BuildOperation.Extend: _nextOperation = RepetableBuildState.BuildOperation.None; return Extend(); break;
+                        case RepetableBuildState.BuildOperation.Retract: _nextOperation = RepetableBuildState.BuildOperation.None; return Retract(); break;
                         case RepetableBuildState.BuildOperation.Reset: _nextOperation = RepetableBuildState.BuildOperation.None;  return Reset(RepetableBuildState.BuildOperation.Idle); break;
                     }
                 }
@@ -148,7 +149,10 @@ namespace IngameScript
                     }
                     if (Argument == "Builder.Retract")
                     {
-                        _logger.LogInformation("ExpHand.Retract is not implemented");
+                        if (_state.Operation != RepetableBuildState.BuildOperation.Idle)
+                            updateFrequency = Reset(RepetableBuildState.BuildOperation.Retract);
+                        else
+                            updateFrequency = Retract();
                     }
                 }
 
@@ -157,6 +161,7 @@ namespace IngameScript
 
             private void StopBuilder()
             {
+                _state.Operation = RepetableBuildState.BuildOperation.None;
                 _piston.Velocity = 0;
                 _blockUtils.TryTurnOff(_welders);
                 _blockUtils.TryTurnOff(_grinders);
