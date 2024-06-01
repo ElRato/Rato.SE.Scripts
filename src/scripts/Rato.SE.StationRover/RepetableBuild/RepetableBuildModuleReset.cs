@@ -1,4 +1,4 @@
-﻿using Sandbox.Game.EntityComponen7ts;
+﻿using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -46,29 +46,26 @@ namespace IngameScript
                 _blockUtils.TryTurnOff(_grinders);
                 _piston.Velocity = 0;
 
-                while (resetStep != resetDone)
+                resetStep = resetMerge;
+                while (resetStep != resetDone || resetStep != resetFailed)
                 {
                     switch (resetStep)
                     {
                         case resetMerge: foreach (var s in ResetMerge()) { yield return s; } break;
                         case resetConnector: foreach (var s in ResetConnector()) { yield return s; } break;
                         case resetLookForJoin: foreach (var s in LookForJoin()) { yield return s; } break;
-                        case resetFailed: { Status = ModuleStatus.NonFunctional; yield return 100;}  break;
-                        case resetDone: { yield return 100; } break;
+                        case resetFailed: { yield return 100;}  break;
+                        case resetDone: { _nextOperation = nextOperation; yield return 100; } break;
+                        default: yield return 100; break;
                     }
                 }
-
-                _state.Operation = nextOperation;
             }
 
             private IEnumerable<int> ResetMerge()
             {
                 if (!_mergeBlock.IsWorking)
                     if (_blockUtils.TryTurnOn(_mergeBlock))
-                    {
-                        Status = ModuleStatus.NonFunctional;
-                        resetStep = resetDone;
-                    }
+                        resetStep = resetFailed;
 
                 yield return 100;
 
@@ -121,10 +118,10 @@ namespace IngameScript
 
             private IEnumerable<int> LookForJoin()
             {
-                _piston.Velocity = 1;
+                _piston.Velocity = -1;
                 _magnet.Lock();
                 
-                while (_piston.Status != PistonStatus.Extended && !_mergeBlock.IsConnected) yield return 100;
+                while (_piston.Status != PistonStatus.Retracted && !_mergeBlock.IsConnected) yield return 100;
 
                 if (_mergeBlock.IsConnected)
                 {
@@ -133,8 +130,8 @@ namespace IngameScript
                 }
                 else
                 {
-                    _piston.Velocity = -1;
-                    while (_piston.Status != PistonStatus.Retracted && !_mergeBlock.IsConnected) yield return 100;
+                    _piston.Velocity = 1;
+                    while (_piston.Status != PistonStatus.Extended && !_mergeBlock.IsConnected) yield return 100;
 
                     if (_mergeBlock.IsConnected)
                     {

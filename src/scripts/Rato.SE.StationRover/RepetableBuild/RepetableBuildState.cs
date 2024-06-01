@@ -64,6 +64,7 @@ namespace IngameScript
 
             public enum BuildOperation
             {
+                None,
                 Idle,
                 Extend,
                 Retract,

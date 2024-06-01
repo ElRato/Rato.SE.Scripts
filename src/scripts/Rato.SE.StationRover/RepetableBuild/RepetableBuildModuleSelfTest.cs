@@ -25,7 +25,7 @@ namespace IngameScript
         {
             public UpdateFrequency StartTestSquence()
             {
-                return Reset(RepetableBuildState.BuildOperation.Idle);
+                return _buildController.StartSequence(SelfTestSequence());
             }
 
             private IEnumerator<int> SelfTestSequence()

@@ -35,8 +35,6 @@ namespace IngameScript
             private IMyLandingGear _magnet;
             private List<IMyShipGrinder> _grinders;
             private List<IMyShipWelder> _welders;
-            
-
 
             public SequenceExecutor _buildController;
 
@@ -95,14 +93,26 @@ namespace IngameScript
                 storeHandler.WriteToStore(_state);
             }
 
+            RepetableBuildState.BuildOperation _nextOperation = RepetableBuildState.BuildOperation.Idle;
+
             public UpdateFrequency ContinueSequence(UpdateType updateSource)
             {
                 if (Status == ModuleStatus.SelfTest) {
                     _buildController.ContinueSequence(updateSource);
                 }
+
+                if (_nextOperation != RepetableBuildState.BuildOperation.None)
+                {
+                    switch (_nextOperation) 
+                    {
+                        case RepetableBuildState.BuildOperation.Extend: _nextOperation = RepetableBuildState.BuildOperation.None; return Extend(); break;
+                        case RepetableBuildState.BuildOperation.Reset: _nextOperation = RepetableBuildState.BuildOperation.None;  return Reset(RepetableBuildState.BuildOperation.Idle); break;
+                    }
+                }
+
                 if (Status == ModuleStatus.Active && _state.Operation == RepetableBuildState.BuildOperation.Idle) {
                     _logger.LogInformation($"Repetable build is idle");
-                    return 0;
+                    return UpdateFrequency.None;
                 }
                 else
                 {
@@ -148,10 +158,8 @@ namespace IngameScript
             private void StopBuilder()
             {
                 _piston.Velocity = 0;
-                _state.Operation = RepetableBuildOperation.Idle;
-                //welder stop
-                //griners stop
-                //projector shutdown
+                _blockUtils.TryTurnOff(_welders);
+                _blockUtils.TryTurnOff(_grinders);
             }
         }
     }
