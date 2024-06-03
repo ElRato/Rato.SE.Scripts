@@ -32,7 +32,7 @@ namespace IngameScript
             private IEnumerable<int> WaitForOutputChange() {
                 var output = _pannel.MaxOutput;
                 while (output == _pannel.MaxOutput) {
-                    yield return 1;
+                    yield return 100;
                 }
             }
 
