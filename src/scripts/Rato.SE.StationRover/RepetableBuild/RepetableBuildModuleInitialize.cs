@@ -50,6 +50,8 @@ namespace IngameScript
                 StatusDetails.Add(status);
 
                 Status = StatusDetails.Any(c => c.Level == ActionStatus.Error) ? ModuleStatus.NonFunctional : ModuleStatus.Initialized;
+
+                _dbgLogger.LogInformation("Initialize done");
             }
 
             private T InitializeBlock<T>(string Name, string sufix, List<T> lempList, ActionStatus errorStatus, out ModuleStatusDetail status) where T: class, IMyTerminalBlock

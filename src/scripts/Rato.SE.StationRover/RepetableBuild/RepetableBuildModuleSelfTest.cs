@@ -32,7 +32,8 @@ namespace IngameScript
             {
                 Status = ModuleStatus.SelfTest;
                 yield return 100;
-                Status = ModuleStatus.Active;
+                _dbgLogger.LogInformation("SelfTest done");
+                Status = ModuleStatus.ReadyToStart;
             }
         }
     }

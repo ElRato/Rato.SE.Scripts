@@ -24,41 +24,51 @@ namespace IngameScript
     {
         public partial class RepetableBuildModule : IControllModule
         {
-            public UpdateFrequency Reset(RepetableBuildState.BuildOperation nextOperation)
+            public UpdateFrequency Reset()
             {
-                return _buildController.StartSequence(ResetSequence(nextOperation));
+                _state.Operation = RepetableBuildState.BuildOperation.Reset;
+                return _buildController.StartSequence(ResetSequence());
             }
 
-            const int resetNone = 0;
             const int resetMerge = 1;
             const int resetConnector = 2;
             const int resetLookForJoin = 3;
             const int resetDone = 4;
             const int resetFailed = 10;
 
-            private int resetStep = resetNone;
+            private int resetStep;
 
-            private IEnumerator<int> ResetSequence(RepetableBuildState.BuildOperation nextOperation)
+            private IEnumerator<int> ResetSequence()
             {
-                _state.Operation = RepetableBuildState.BuildOperation.Reset;
-
+                _dbgLogger.LogInformation($"ResetSequence Started");
+                yield return 100;
                 _blockUtils.TryTurnOff(_welders);
+                yield return 100;
                 _blockUtils.TryTurnOff(_grinders);
+                yield return 100;
                 _piston.Velocity = 0;
 
                 resetStep = resetMerge;
                 while (resetStep != resetDone || resetStep != resetFailed)
                 {
-                    switch (resetStep)
-                    {
-                        case resetMerge: foreach (var s in ResetMerge()) { yield return s; } break;
-                        case resetConnector: foreach (var s in ResetConnector()) { yield return s; } break;
-                        case resetLookForJoin: foreach (var s in LookForJoin()) { yield return s; } break;
-                        case resetFailed: { yield return 100;}  break;
-                        case resetDone: { _nextOperation = nextOperation; yield return 100; } break;
-                        default: yield return 100; break;
-                    }
+                    if (resetStep == resetMerge)
+                        foreach (var s in ResetMerge()) { yield return s; }
+                    if (resetStep == resetConnector)
+                        foreach (var s in ResetConnector()) { yield return s; }
+                    if (resetStep == resetLookForJoin)
+                        foreach (var s in LookForJoin()) { yield return s; }
+
+                    if (resetStep == resetDone || resetStep == resetFailed)
+                        break;
                 }
+                _dbgLogger.LogInformation($"Reset completed with step {resetStep}");
+                _piston.Velocity = 0;
+                if (resetStep == resetDone)
+                    _state.Operation = RepetableBuildState.BuildOperation.WaitForNext;
+                if (resetStep == resetFailed)
+                    _state.Operation = RepetableBuildState.BuildOperation.Error;
+
+                yield return 100;
             }
 
             private IEnumerable<int> ResetMerge()
@@ -80,6 +90,7 @@ namespace IngameScript
                 }
 
                 yield return 100;
+                _dbgLogger.LogInformation($"Reset merge completed with {resetStep}");
             }
 
             private IEnumerable<int> ResetConnector()
@@ -114,14 +125,26 @@ namespace IngameScript
                 }
 
                 yield return 100;
+                _dbgLogger.LogInformation($"ResetConnector completed with {resetStep}");
             }
 
             private IEnumerable<int> LookForJoin()
             {
                 _piston.Velocity = -1;
                 _magnet.Lock();
-                
-                while (_piston.Status != PistonStatus.Retracted && !_mergeBlock.IsConnected) yield return 100;
+
+                _dbgLogger.LogInformation($"LookForJoin Started");
+
+                var position = _piston.NormalizedPosition;
+                while (_piston.Status != PistonStatus.Retracted && !_mergeBlock.IsConnected)
+                {
+                    if (Math.Abs(position - _piston.NormalizedPosition) < 0.01)
+                    {
+                        resetStep = resetFailed;
+                        _dbgLogger.LogInformation($"Piston blocked");
+                    }
+                    yield return 1000;
+                }
 
                 if (_mergeBlock.IsConnected)
                 {
@@ -141,6 +164,9 @@ namespace IngameScript
                     else
                         resetStep = resetFailed;
                 }
+
+                _piston.Velocity = 0;
+                yield return 1000;
             }
         }
     }

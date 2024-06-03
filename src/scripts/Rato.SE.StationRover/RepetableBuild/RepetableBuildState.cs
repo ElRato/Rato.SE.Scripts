@@ -50,16 +50,31 @@ namespace IngameScript
                 }
             }
 
+            private int _nextOperation;
+            public BuildOperation NextOperation
+            {
+                get
+                {
+                    return (BuildOperation)_nextOperation;
+                }
+                set
+                {
+                    _nextOperation = (int)value;
+                }
+            }
+
             public void LoadValues(MyIni config)
             {
-                _operation = config.Get(nameof(RepetableBuildState), nameof(Operation)).ToInt32((int)BuildOperation.Idle);
+                _operation = config.Get(nameof(RepetableBuildState), nameof(Operation)).ToInt32((int)BuildOperation.None);
                 _step = config.Get(nameof(RepetableBuildState), nameof(Step)).ToInt32((int)IterationStep.Idle);
+                _nextOperation = config.Get(nameof(RepetableBuildState), nameof(NextOperation)).ToInt32((int)BuildOperation.Idle);
             }
 
             public void WriteValues(MyIni config)
             {
                 config.Set(nameof(RepetableBuildState), nameof(Operation), _operation);
                 config.Set(nameof(RepetableBuildState), nameof(Step), _step);
+                config.Set(nameof(RepetableBuildState), nameof(NextOperation), _nextOperation);
             }
 
             public enum BuildOperation
@@ -68,7 +83,9 @@ namespace IngameScript
                 Idle,
                 Extend,
                 Retract,
-                Reset
+                Reset,
+                WaitForNext,
+                Error
             }
 
             public enum IterationStep

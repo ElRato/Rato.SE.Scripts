@@ -27,6 +27,7 @@ namespace IngameScript
             private RepetableBuildState _state;
             private MyGridProgram _program;
             private ILogger _logger;
+            private ILogger _dbgLogger;
 
             private IMyPistonBase _piston;
             private IMyShipMergeBlock _mergeBlock;
@@ -44,10 +45,11 @@ namespace IngameScript
 
             private readonly BlockUtils _blockUtils;
 
-            public RepetableBuildModule(MyGridProgram program, ILogger logger)
+            public RepetableBuildModule(MyGridProgram program, ILogger logger, ILogger dbg)
             {
                 _program = program;
                 _logger = logger;
+                _dbgLogger = dbg;
 
                 _blockUtils = new BlockUtils();
 
@@ -93,44 +95,37 @@ namespace IngameScript
                 storeHandler.WriteToStore(_state);
             }
 
-            RepetableBuildState.BuildOperation _nextOperation = RepetableBuildState.BuildOperation.Idle;
-
             public UpdateFrequency ContinueSequence(UpdateType updateSource)
             {
-                if (Status == ModuleStatus.SelfTest) {
-                    _buildController.ContinueSequence(updateSource);
-                }
-
-                if (_nextOperation != RepetableBuildState.BuildOperation.None)
+                if (_state.Operation == RepetableBuildState.BuildOperation.WaitForNext)
                 {
-                    switch (_nextOperation) 
+                    var operation = _state.NextOperation;
+                    _state.NextOperation = RepetableBuildState.BuildOperation.None;
+                    switch (operation)
                     {
-                        case RepetableBuildState.BuildOperation.Extend: _nextOperation = RepetableBuildState.BuildOperation.None; return Extend(); break;
-                        case RepetableBuildState.BuildOperation.Retract: _nextOperation = RepetableBuildState.BuildOperation.None; return Retract(); break;
-                        case RepetableBuildState.BuildOperation.Reset: _nextOperation = RepetableBuildState.BuildOperation.None;  return Reset(RepetableBuildState.BuildOperation.Idle); break;
+                        case RepetableBuildState.BuildOperation.Extend: return Extend();
+                        case RepetableBuildState.BuildOperation.Retract: return Retract();
+                        case RepetableBuildState.BuildOperation.None:
+                        case RepetableBuildState.BuildOperation.Idle:
+                            _state.Operation = operation; break;
                     }
                 }
 
-                if (Status == ModuleStatus.Active && _state.Operation == RepetableBuildState.BuildOperation.Idle) {
-                    _logger.LogInformation($"Repetable build is idle");
-                    return UpdateFrequency.None;
-                }
-                else
-                {
-                    _logger.LogInformation($"Repetable build controller state:{_buildController.State}");
-                    return _buildController.ContinueSequence(updateSource);
-                }
+                return _buildController.ContinueSequence(updateSource);
             }
 
             public UpdateFrequency AutoStart()
             {
+                _dbgLogger.LogInformation("AutoStart started");
                 Status = ModuleStatus.Active;
-                return Reset(RepetableBuildState.BuildOperation.Idle);
+                _state.NextOperation = RepetableBuildState.BuildOperation.Idle;
+                return Reset();
             }
             
             public UpdateFrequency TerminalAction(UpdateType updateSource, string Argument)
             {
                 _logger.LogInformation("Builder awaked");
+                try { throw new Exception(); } catch { }
                 var updateFrequency = UpdateFrequency.None;
 
                 if (Argument.StartsWith("Builder") && (updateSource | UpdateType.Terminal | UpdateType.Trigger) > 0)
@@ -143,19 +138,24 @@ namespace IngameScript
                     if (Argument == "Builder.Extend")
                     {
                         if (_state.Operation != RepetableBuildState.BuildOperation.Idle)
-                            updateFrequency = Reset(RepetableBuildState.BuildOperation.Extend);
+                        {
+                            _state.NextOperation = RepetableBuildState.BuildOperation.Extend;
+                            updateFrequency = Reset();
+                        }
                         else
                             updateFrequency = Extend();
                     }
                     if (Argument == "Builder.Retract")
                     {
                         if (_state.Operation != RepetableBuildState.BuildOperation.Idle)
-                            updateFrequency = Reset(RepetableBuildState.BuildOperation.Retract);
+                        {
+                            _state.NextOperation = RepetableBuildState.BuildOperation.Retract;
+                            updateFrequency = Reset();
+                        }
                         else
                             updateFrequency = Retract();
                     }
                 }
-
                 return updateFrequency;
             }
 

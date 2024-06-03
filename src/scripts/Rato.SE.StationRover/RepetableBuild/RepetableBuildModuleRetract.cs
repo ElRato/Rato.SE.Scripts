@@ -33,9 +33,13 @@ namespace IngameScript
             private IEnumerator<int> RetractSequence()
             {
                 _blockUtils.TryTurnOn(_grinders);
+                yield return 100;
                 _blockUtils.TryTurnOff(_welders);
+                yield return 100;
                 _blockUtils.TryTurnOn(_mergeBlock);
+                yield return 100;
                 _blockUtils.TryTurnOn(_projector);
+                yield return 100;
 
                 if (!_connector.IsConnected)
                 {
@@ -49,18 +53,35 @@ namespace IngameScript
                         _magnet.Unlock();
 
                         _piston.Velocity = -_defaultVelocity;
-                        while (_piston.Status != PistonStatus.Retracted)
-                            yield return 100;
 
+                        var position = _piston.NormalizedPosition;
+                        while (_piston.Status != PistonStatus.Retracted)
+                        {
+                            yield return 1000;
+                            if (Math.Abs(position - _piston.NormalizedPosition) < 0.001)
+                            {
+                                resetStep = resetFailed;
+                                StopBuilder();
+                                yield break;
+                            }
+                            position = _piston.NormalizedPosition;
+                        }
+                        
                         if (_mergeBlock.State != MergeState.Locked)
+                        {
                             StopBuilder();
+                            yield break;
+                        }
 
                         _magnet.Lock();
 
                         yield return 100;
 
                         if (!_magnet.IsLocked)
+                        {
                             StopBuilder();
+                            yield break;
+                        }
 
                         _connector.Disconnect();
                         _blockUtils.TryTurnOff(_mergeBlock);
@@ -70,8 +91,9 @@ namespace IngameScript
                         while (_piston.Status != PistonStatus.Extended) yield return 100;
                         _piston.Velocity = 0;
 
-                        if (_connector.IsFunctional && _connector.Status != MyShipConnectorStatus.Connectable)
-                            StopBuilder();
+                        if (_connector.IsFunctional)
+                            while (_connector.Status != MyShipConnectorStatus.Connectable)
+                                yield return 100;
 
                         yield return 100;
                         _blockUtils.TryTurnOn(_mergeBlock);
@@ -81,6 +103,7 @@ namespace IngameScript
                     else
                     {
                         StopBuilder();
+                        yield break;
                     }
                 }
             }

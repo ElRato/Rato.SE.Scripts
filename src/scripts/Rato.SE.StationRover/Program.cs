@@ -24,20 +24,28 @@ namespace IngameScript
     {
         private ILogger _logger;
         private ILogger _stateLcd;
+        private ILogger _debuggerLcd;
         private SystemControlUnit _scu;
         private CommunicationBus _bus;
 
+        List<Sandbox.ModAPI.Ingame.IMyTextPanel> lcds;
 
         public Program()
         {
+            
             _logger = new EchoLogger(this);
             var lcd = Me.GetSurface(0);
             _stateLcd = new LcdTextLogger(this, "System", lcd);
 
+
+            lcds = new List<Sandbox.ModAPI.Ingame.IMyTextPanel>();
+            GridTerminalSystem.GetBlocksOfType(lcds, p => p.CustomName.Contains("debug"));
+            _debuggerLcd = new LcdTextLogger(this, "DEBUG", lcds[0]);
+            _debuggerLcd.LogInformation("Test log");
             var solarModule = new SolarTrackModule(this, _logger);
             var handModule = new ExpandableHandModule(this, _logger);
             var pistonResetter = new PistonResetterModule(this, _logger);
-            var builder = new RepetableBuildModule(this, _logger);
+            var builder = new RepetableBuildModule(this, _logger, _debuggerLcd);
 
             _bus = new CommunicationBus(_logger);
             _bus.AddModule("RepetableBuild", builder);

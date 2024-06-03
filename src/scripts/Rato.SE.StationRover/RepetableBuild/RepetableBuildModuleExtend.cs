@@ -30,17 +30,22 @@ namespace IngameScript
                 return _buildController.StartSequence(ExtendSequence());
             }
 
-            private float _defaultVelocity = 0.2F;
+            private float _defaultVelocity = 0.3F;
             private IEnumerator<int> ExtendSequence()
             {
                 _blockUtils.TryTurnOn(_welders);
+                yield return 100;
                 _blockUtils.TryTurnOff(_grinders);
+                yield return 100;
                 _blockUtils.TryTurnOn(_mergeBlock);
+                yield return 100;
                 _blockUtils.TryTurnOn(_projector);
-                
+                yield return 100;
+
                 if (!_connector.IsConnected)
                 {
                     StopBuilder();
+                    yield break;
                 }
 
                 while (true)
@@ -50,18 +55,36 @@ namespace IngameScript
                         _magnet.Unlock();
 
                         _piston.Velocity = _defaultVelocity;
+
+                        var position = _piston.NormalizedPosition;
                         while (_piston.Status != PistonStatus.Extended)
-                            yield return 100;
+                        {
+                            yield return 1000;
+                            if (Math.Abs(position - _piston.NormalizedPosition) < 0.002)
+                            {
+                                _dbgLogger.LogInformation($"Extend Stopped before {position} now {_piston.NormalizedPosition}");
+                                resetStep = resetFailed;
+                                StopBuilder();
+                                yield break;
+                            }
+                            position = _piston.NormalizedPosition;
+                        }
 
                         if (_mergeBlock.State != MergeState.Locked)
+                        {
                             StopBuilder();
+                            yield break;
+                        }
 
                         _magnet.Lock();
 
                         yield return 100;
 
                         if (!_magnet.IsLocked)
+                        {
                             StopBuilder();
+                            yield break;
+                        }
 
                         _connector.Disconnect();
                         _blockUtils.TryTurnOff(_mergeBlock);
@@ -70,9 +93,11 @@ namespace IngameScript
                         _piston.Velocity = -_defaultVelocity * 5;
                         while (_piston.Status != PistonStatus.Retracted) yield return 100;
                         _piston.Velocity = 0;
-
-                        if (_connector.IsFunctional && _connector.Status != MyShipConnectorStatus.Connectable)
-                            StopBuilder();
+                        yield return 100;
+                        
+                        if (_connector.IsFunctional)
+                            while (_connector.Status != MyShipConnectorStatus.Connectable)
+                                yield return 100;
 
                         yield return 100;
                         _blockUtils.TryTurnOn(_mergeBlock);
@@ -82,6 +107,7 @@ namespace IngameScript
                     else
                     {
                         StopBuilder();
+                        yield break;
                     }
                 }
             }
